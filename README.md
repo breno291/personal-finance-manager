@@ -1,7 +1,8 @@
 # personal-finance-manager
+
 A personal finance management application developed with Python, Flask and SQLite for learning and portfolio purposes.
 
-O sistema terá como objetivo centralizar compras, parcelas, responsabilidades entre pessoas, formas de pagamento, vencimentos e estados de pagamento, substituindo gradualmente o controle realizado em planilha.
+O sistema tem como objetivo centralizar compras, parcelas, responsabilidades entre pessoas, formas de pagamento, vencimentos e estados de pagamento, substituindo gradualmente o controle realizado em planilha.
 
 ## Stack inicial
 
@@ -25,9 +26,10 @@ O projeto será desenvolvido de forma incremental utilizando **TDD (Test-Driven 
 Fluxo principal:
 
 1. Criar teste
-2. Fazer o teste passar
-3. Refatorar
-4. Repetir
+2. Fazer o teste falhar
+3. Implementar o necessário
+4. Refatorar
+5. Repetir
 
 Cada etapa deve ser concluída antes de avançar para a próxima.
 
@@ -45,41 +47,41 @@ A planilha existente poderá ser importada futuramente.
 
 ## 1.2 Criar tabelas
 
-### `compras`
+### `purchases`
 
 Representa a compra original realizada.
 
 | Campo                | Descrição                                     |
 | -------------------- | --------------------------------------------- |
 | `id`                 | Identificador único                           |
-| `descricao`          | Descrição da compra                           |
-| `data_compra`        | Data em que a compra foi realizada            |
-| `valor`              | Valor total da compra, armazenado em centavos |
-| `total_parcelas`     | Quantidade total de parcelas                  |
-| `forma_pagamento_id` | Forma de pagamento utilizada                  |
-| `categoria_id`       | Categoria da compra                           |
-| `subcategoria_id`    | Subcategoria da compra                        |
-| `criado_em`          | Data/hora de criação                          |
-| `atualizado_em`      | Data/hora da última atualização               |
-| `removido`           | Indica soft delete                            |
+| `description`        | Descrição da compra                           |
+| `purchase_date`      | Data em que a compra foi realizada            |
+| `value`              | Valor total da compra, armazenado em centavos |
+| `total_installments` | Quantidade total de parcelas                  |
+| `payment_method_id`  | Forma de pagamento utilizada                  |
+| `category_id`        | Categoria da compra                           |
+| `subcategory_id`     | Subcategoria da compra                        |
+| `created_at`         | Data/hora de criação                          |
+| `updated_at`         | Data/hora da última atualização               |
+| `removed`            | Indica soft delete                            |
 
 ---
 
-### `lancamentos`
+### `transactions`
 
 Representa quanto cada pessoa é responsável por pagar em cada parcela de uma compra.
 
-| Campo             | Descrição                                  |
-| ----------------- | ------------------------------------------ |
-| `id`              | Identificador único                        |
-| `compra_id`       | Compra à qual pertence                     |
-| `pessoa_id`       | Pessoa responsável pelo lançamento         |
-| `parcela`         | Número da parcela                          |
-| `valor`           | Valor que a pessoa deve pagar, em centavos |
-| `data_vencimento` | Data de vencimento                         |
-| `data_pagamento`  | Data em que foi efetivamente pago          |
-| `status`          | Estado do lançamento                       |
-| `removido`        | Indica soft delete                         |
+| Campo          | Descrição                                  |
+| -------------- | ------------------------------------------ |
+| `id`           | Identificador único                        |
+| `purchase_id`  | Compra à qual pertence                     |
+| `person_id`    | Pessoa responsável pelo lançamento         |
+| `installment`  | Número da parcela                          |
+| `value`        | Valor que a pessoa deve pagar, em centavos |
+| `due_date`     | Data de vencimento                         |
+| `payment_date` | Data em que foi efetivamente pago          |
+| `status`       | Estado do lançamento                       |
+| `removed`      | Indica soft delete                         |
 
 ### Status do lançamento
 
@@ -91,32 +93,32 @@ Representa quanto cada pessoa é responsável por pagar em cada parcela de uma c
 
 ---
 
-### `pessoas`
+### `people`
 
 Representa pessoas ou entidades que participam financeiramente das compras.
 
 Exemplo: uma pessoa da família, outra pessoa ou a própria "Casa".
 
-| Campo      | Descrição               |
-| ---------- | ----------------------- |
-| `id`       | Identificador único     |
-| `nome`     | Nome da pessoa/entidade |
-| `removido` | Indica soft delete      |
+| Campo     | Descrição               |
+| --------- | ----------------------- |
+| `id`      | Identificador único     |
+| `name`    | Nome da pessoa/entidade |
+| `removed` | Indica soft delete      |
 
 ---
 
-### `formas_pagamento`
+### `payment_methods`
 
 Representa a forma utilizada para realizar uma compra.
 
-| Campo            | Descrição                           |
-| ---------------- | ----------------------------------- |
-| `id`             | Identificador único                 |
-| `descricao`      | Nome da forma de pagamento          |
-| `tipo`           | Tipo da forma de pagamento          |
-| `dia_fechamento` | Dia de fechamento, quando aplicável |
-| `dia_vencimento` | Dia de vencimento, quando aplicável |
-| `removido`       | Indica soft delete                  |
+| Campo          | Descrição                           |
+| -------------- | ----------------------------------- |
+| `id`           | Identificador único                 |
+| `description`  | Nome da forma de pagamento          |
+| `payment_type` | Tipo da forma de pagamento          |
+| `closing_day`  | Dia de fechamento, quando aplicável |
+| `due_day`      | Dia de vencimento, quando aplicável |
+| `removed`      | Indica soft delete                  |
 
 ### Tipos iniciais
 
@@ -152,6 +154,7 @@ Exemplo:
 
 ```text
 Compra: R$ 500
+
 Parcelas: 2
 
 Parcela 1
@@ -172,11 +175,11 @@ A divisão não precisa ser igual entre pessoas ou entre parcelas.
 
 # Regras de negócio
 
-## Compras
+## `purchases`
 
 * Toda compra possui pelo menos um lançamento.
 * O valor total dos lançamentos deve corresponder ao valor da compra.
-* `total_parcelas` pertence à compra.
+* `total_installments` pertence à compra.
 * O número da parcela pertence ao lançamento.
 * Uma compra pode ter diferentes divisões entre pessoas em cada parcela.
 
@@ -186,7 +189,7 @@ O status pertence somente aos lançamentos.
 
 Uma compra é considerada paga quando todos os seus lançamentos ativos estão pagos.
 
-Não haverá campo `pago` na tabela `compras`.
+Não haverá campo `paid` na tabela `purchases`.
 
 Uma compra ou parcela poderá futuramente ser marcada como paga de uma só vez, fazendo a aplicação atualizar os lançamentos correspondentes.
 
@@ -196,8 +199,8 @@ Uma compra ou parcela poderá futuramente ser marcada como paga de uma só vez, 
 
 Será possível futuramente comparar:
 
-* valor total dos lançamentos separados
-* valor disponível no cofrinho/reserva
+* valor total dos lançamentos separados;
+* valor disponível no cofrinho/reserva.
 
 ## Atrasado
 
@@ -207,15 +210,15 @@ Um lançamento será considerado atrasado quando:
 * a data de vencimento já tiver passado;
 * não estiver pago.
 
-Não será criado um campo `atrasado`.
+Não será criado um campo `overdue`.
 
 ## Datas
 
-`data_compra` representa o dia em que a compra aconteceu.
+`purchase_date` representa o dia em que a compra aconteceu.
 
-`data_vencimento` representa o dia em que determinado lançamento deve ser pago.
+`due_date` representa o dia em que determinado lançamento deve ser pago.
 
-`data_pagamento` representa o dia em que o pagamento realmente aconteceu.
+`payment_date` representa o dia em que o pagamento realmente aconteceu.
 
 Compras podem possuir data de vencimento mesmo quando não são realizadas com cartão.
 
@@ -251,7 +254,7 @@ A ideia é criar uma camada de acesso aos dados que possa ser utilizada pelas fu
 
 O formato definitivo dessas funções será definido durante a implementação.
 
-O soft delete será utilizado nas entidades que possuem o campo `removido`.
+O soft delete será utilizado nas entidades que possuem o campo `removed`.
 
 Não é necessário implementar todas as operações imediatamente se alguma delas ainda não tiver utilidade.
 
