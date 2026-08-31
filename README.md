@@ -57,7 +57,7 @@ Representa a compra original realizada.
 | `description`        | Descrição da compra                           |
 | `purchase_date`      | Data em que a compra foi realizada            |
 | `value`              | Valor total da compra, armazenado em centavos |
-| `total_installments` | Quantidade total de parcelas                  |
+| `installment_count` | Quantidade total de parcelas                  |
 | `payment_method_id`  | Forma de pagamento utilizada                  |
 | `category_id`        | Categoria da compra                           |
 | `subcategory_id`     | Subcategoria da compra                        |
@@ -179,7 +179,7 @@ A divisão não precisa ser igual entre pessoas ou entre parcelas.
 
 * Toda compra possui pelo menos um lançamento.
 * O valor total dos lançamentos deve corresponder ao valor da compra.
-* `total_installments` pertence à compra.
+* `installment_count` pertence à compra.
 * O número da parcela pertence ao lançamento.
 * Uma compra pode ter diferentes divisões entre pessoas em cada parcela.
 
