@@ -1,3 +1,5 @@
+import re
+
 from datetime import datetime
 
 def validate_required_string(value, field_name):
@@ -46,6 +48,27 @@ def validate_transaction_status(status):
         raise ValueError("The status must be between 0 and 2.")
 
 
+def validate_email(email):
+    validate_required_string(email, "email")
+
+    email = email.strip()
+
+    pattern = r"^[^@\s]+@[^@\s]+\.[^@\s]+$"
+
+    if not re.match(pattern, email):
+        raise ValueError("email must be a valid email")
+
+
+def validate_phone(phone):
+    validate_required_string(phone, "phone")
+
+    phone = phone.strip()
+
+    if not phone.isdigit():
+        raise ValueError("phone must contain only numbers")
+
+    if len(phone) not in (10, 11):
+        raise ValueError("phone must have 10 or 11 digits")
 
 
 

@@ -13,6 +13,8 @@ def create_tables(connection):
     cursor.execute("""CREATE TABLE IF NOT EXISTS people (
         id INTEGER PRIMARY KEY,
         name TEXT NOT NULL,
+        email TEXT NOT NULL,
+        phone TEXT NOT NULL,
         removed INTEGER NOT NULL DEFAULT 0
     )""")
 

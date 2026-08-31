@@ -1,14 +1,19 @@
 import sqlite3
 
-from app.services.validation import validate_required_string, validate_positive_integer
+from app.services.validation import validate_required_string, validate_positive_integer, validate_email, validate_phone
 
-def insert_person(connection, name):
+def insert_person(connection, name, email, phone):
     validate_required_string(name, "name")
+    validate_email(email)
+    validate_phone(phone)
+
     name = name.strip()
+    email = email.strip()
+    phone = phone.strip()
 
     try:
-        query = "INSERT INTO people (name) VALUES (?)"
-        values = (name,)
+        query = "INSERT INTO people (name, email, phone) VALUES (?, ?, ?)"
+        values = (name, email, phone)
 
         cursor = connection.cursor()
         cursor.execute(query, values)

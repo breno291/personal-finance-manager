@@ -6,7 +6,7 @@ from app.database.payment_methods import insert_payment_method
 from app.database.purchases import insert_purchase
 
 def test_insert_transaction(connection):
-    person_id = insert_person(connection, "luciana")
+    person_id = insert_person(connection, "luciana", "luciana@email.com", "81988888888")
     payment_method_id = insert_payment_method(connection, "PicPay", 2, 23, 6)
     purchase_id = insert_purchase(connection, "Ração", "05/12/2026", 3221, 1, payment_method_id, 2, 4)
     transaction_id = insert_transaction(connection, purchase_id, person_id, 1, 3221, "01/09/2026", 1)
@@ -29,7 +29,7 @@ def test_insert_transaction(connection):
 
 
 def test_insert_transaction_with_invalid_positive_integer(connection):
-    person_id = insert_person(connection, "Luciana")
+    person_id = insert_person(connection, "Luciana", "luciana@email.com", "81988888888")
     payment_method_id = insert_payment_method(connection, "PicPay", 2, 23, 6)
     purchase_id = insert_purchase(
         connection, "Ração", "05/12/2026", 3221, 1, payment_method_id, 2, 4
@@ -57,7 +57,7 @@ def test_insert_transaction_with_invalid_positive_integer(connection):
 
 
 def test_insert_transaction_with_invalid_status(connection):
-    person_id = insert_person(connection, "Luciana")
+    person_id = insert_person(connection, "Luciana", "luciana@email.com", "81988888888")
     payment_method_id = insert_payment_method(connection, "PicPay", 2, 23, 6)
     purchase_id = insert_purchase(
         connection, "Ração", "05/12/2026", 3221, 1, payment_method_id, 2, 4
@@ -90,7 +90,7 @@ def test_insert_transaction_with_invalid_status(connection):
 
 
 def test_insert_transaction_with_nonexistent_purchase_id(connection):
-    person_id = insert_person(connection, "Luciana")
+    person_id = insert_person(connection, "Luciana", "luciana@email.com", "81988888888")
 
     with pytest.raises(sqlite3.IntegrityError):
         insert_transaction(
@@ -111,7 +111,7 @@ def test_insert_transaction_with_nonexistent_person_id(connection):
 
 
 def test_insert_transaction_with_invalid_due_date(connection):
-    person_id = insert_person(connection, "Luciana")
+    person_id = insert_person(connection, "Luciana", "luciana@email.com", "81988888888")
     payment_method_id = insert_payment_method(connection, "PicPay", 2, 23, 6)
     purchase_id = insert_purchase(
         connection, "Ração", "05/12/2026", 3221, 1, payment_method_id, 2, 4

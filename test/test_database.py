@@ -38,6 +38,8 @@ def test_create_tables(tmp_path):
     assert [col[1] for col in cursor.fetchall()] == [
         "id",
         "name",
+        "email",
+        "phone",
         "removed"
     ]
 
@@ -91,12 +93,16 @@ def test_table_constraints(connection):
 
     assert columns[0][2] == "INTEGER"
     assert columns[1][2] == "TEXT"
-    assert columns[2][2] == "INTEGER"
+    assert columns[2][2] == "TEXT"
+    assert columns[3][2] == "TEXT"
+    assert columns[4][2] == "INTEGER"
 
     assert columns[1][3] == 1  # name NOT NULL
-    assert columns[2][3] == 1  # removed NOT NULL
+    assert columns[2][3] == 1  # email NOT NULL
+    assert columns[3][3] == 1  # phone NOT NULL
+    assert columns[4][3] == 1  # removed NOT NULL
 
-    assert columns[2][4] == "0"  # removed DEFAULT 0
+    assert columns[4][4] == "0"  # removed DEFAULT 0
 
     # Payment method types and constraints
     cursor.execute("PRAGMA table_info(payment_methods)")
