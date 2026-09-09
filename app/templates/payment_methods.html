@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Formas de Pagamento | Personal Finance Manager{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="page-title">
+        <h1>Formas de Pagamento</h1>
+        <p>Gerencie suas formas de pagamento.</p>
+    </div>
+
+    <button class="add-button" type="button">
+        <i data-lucide="plus"></i>
+        Adicionar Forma de Pagamento
+    </button>
+</div>
+
+<div class="records-container">
+    <div class="empty-state">
+        <i data-lucide="credit-card"></i>
+        <p>Nenhuma forma de pagamento encontrada.</p>
+    </div>
+</div>
+{% endblock %}

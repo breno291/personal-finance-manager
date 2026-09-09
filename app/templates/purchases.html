@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Compras | Personal Finance Manager{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="page-title">
+        <h1>Compras</h1>
+        <p>Gerencie suas compras.</p>
+    </div>
+
+    <button class="add-button" type="button">
+        <i data-lucide="plus"></i>
+        Adicionar Compra
+    </button>
+</div>
+
+<div class="records-container">
+    <div class="empty-state">
+        <i data-lucide="shopping-cart"></i>
+        <p>Nenhuma compra encontrada.</p>
+    </div>
+</div>
+{% endblock %}
