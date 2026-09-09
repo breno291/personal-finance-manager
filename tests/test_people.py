@@ -2,6 +2,11 @@ import pytest
 
 from app.database.people import *
 
+
+# ==================================================
+# INSERT PERSON
+# ==================================================
+
 def test_insert_person(connection):
     person_id = insert_person(connection,"    Breno    ","    breno@email.com    ","    81999999999    ")
     assert person_id is not None
@@ -69,6 +74,10 @@ def test_insert_person_with_invalid_phone(connection):
         insert_person(connection, "Breno", "breno@email.com", "81999abc999")
 
 
+# ==================================================
+# SELECT PERSON BY ID
+# ==================================================
+
 def test_select_person_by_id(connection):
     person_id = insert_person(connection, "Gabi", "gabi@email.com", "81988888888")
     selected_person = select_person_by_id(connection, person_id)
@@ -113,6 +122,10 @@ def test_select_person_by_id_with_removed_person(connection):
     assert selected_person is None
 
 
+# ==================================================
+# SELECT PEOPLE
+# ==================================================
+
 def test_select_people(connection):
     insert_person(connection, "Breno", "breno@gmail.com", "81982474242")
     insert_person(connection, "Luh", "luh@gmail.com", "81982474244")
@@ -152,10 +165,12 @@ def test_select_people_empty(connection):
 def test_select_people_with_pagination(connection):
     page = 1
     total_number_of_items = 6
-    for i in range(10): 
+
+    for i in range(10):
         insert_person(connection, f"test_{i}", f"test_{i}@gmail.com", f"8198242424{i}")
 
     people = select_people(connection, page, total_number_of_items)
+
     assert len(people) == total_number_of_items
     assert people[0][1] == "test_9"
     assert people[1][1] == "test_8"
@@ -164,9 +179,9 @@ def test_select_people_with_pagination(connection):
     assert people[4][1] == "test_5"
     assert people[5][1] == "test_4"
 
-
     page = 2
     people_dois = select_people(connection, page, total_number_of_items)
+
     assert len(people_dois) == 4
     assert people_dois[0][1] == "test_3"
     assert people_dois[1][1] == "test_2"
@@ -202,33 +217,6 @@ def test_select_people_with_invalid_total_number_of_items(connection):
         select_people(connection, 1, True)
 
 
-def test_count_people(connection):
-    assert count_people(connection) == 0
-
-    for i in range(3):
-        insert_person(connection, f"test_{i}", f"test_{i}@gmail.com", f"8198242424{i}")
-
-    assert count_people(connection) == 3
-
-    person_id = insert_person(connection, "Gabi", "gabi@email.com", "81988888888")
-    assert count_people(connection) == 4
-
-    cursor = connection.cursor()
-    cursor.execute("UPDATE people SET removed = 1 WHERE id = ?", (person_id,))
-    connection.commit()
-    assert count_people(connection) == 3
-
-
-def test_count_people_with_search(connection):
-    insert_person(connection, "Luciana", "luciana@email.com", "81982474242")
-    insert_person(connection, "Briana", "briana@email.com", "81982474243")
-    insert_person(connection, "Breno", "breno@email.com", "81982474244")
-
-    assert count_people(connection, search="ana") == 2
-    assert count_people(connection, search="Breno") == 1
-    assert count_people(connection, search="Gabi") == 0
-
-
 def test_select_people_with_search(connection):
     insert_person(connection, "Breno", "breno@email.com", "81982474242")
     insert_person(connection, "Gabi", "gabi@email.com", "81988888888")
@@ -236,12 +224,13 @@ def test_select_people_with_search(connection):
     insert_person(connection, "Briana", "briana@email.com", "81982474242")
 
     selected_person = select_people(connection, search="Gabi")
+
     assert selected_person[0][1] == "Gabi"
     assert selected_person[0][2] == "gabi@email.com"
     assert selected_person[0][3] == "81988888888"
 
-
     selected_person = select_people(connection, search="ana")
+
     assert selected_person[0][1] == "Luciana"
     assert selected_person[0][2] == "luciana@email.com"
     assert selected_person[0][3] == "81982474242"
@@ -250,11 +239,12 @@ def test_select_people_with_search(connection):
     assert selected_person[1][2] == "briana@email.com"
     assert selected_person[1][3] == "81982474242"
 
-
     cursor = connection.cursor()
     cursor.execute("UPDATE people SET removed = 1 WHERE id = ?", (person_id,))
     connection.commit()
+
     selected_person = select_people(connection, search="ana")
+
     assert selected_person[0][1] == "Briana"
     assert selected_person[0][2] == "briana@email.com"
     assert selected_person[0][3] == "81982474242"
@@ -279,9 +269,48 @@ def test_select_people_with_search_and_pagination(connection):
     assert people[3][1] == "Teste 0"
 
 
+# ==================================================
+# COUNT PEOPLE
+# ==================================================
+
+def test_count_people(connection):
+    assert count_people(connection) == 0
+
+    for i in range(3):
+        insert_person(connection, f"test_{i}", f"test_{i}@gmail.com", f"8198242424{i}")
+
+    assert count_people(connection) == 3
+
+    person_id = insert_person(connection, "Gabi", "gabi@email.com", "81988888888")
+
+    assert count_people(connection) == 4
+
+    cursor = connection.cursor()
+    cursor.execute("UPDATE people SET removed = 1 WHERE id = ?", (person_id,))
+    connection.commit()
+
+    assert count_people(connection) == 3
+
+
+def test_count_people_with_search(connection):
+    insert_person(connection, "Luciana", "luciana@email.com", "81982474242")
+    insert_person(connection, "Briana", "briana@email.com", "81982474243")
+    insert_person(connection, "Breno", "breno@email.com", "81982474244")
+
+    assert count_people(connection, search="ana") == 2
+    assert count_people(connection, search="Breno") == 1
+    assert count_people(connection, search="Gabi") == 0
+
+
+# ==================================================
+# UPDATE PERSON
+# ==================================================
+
 def test_update_person(connection):
     person_id = insert_person(connection, "Breno", "breno@email.com", "81982474242")
+
     update_person(connection, person_id, "Luciana", "luh@email.com", "81982889567")
+
     person = select_person_by_id(connection, person_id)
 
     assert person[1] == "Luciana"
@@ -306,8 +335,13 @@ def test_update_person_with_invalid_email(connection):
         update_person(connection, person_id, "Breno", "email-invalido", "81982474242")
 
 
+# ==================================================
+# REMOVE PERSON
+# ==================================================
+
 def test_remove_person(connection):
     person_id = insert_person(connection, "teste", "teste@email.com", "89182474222")
+
     remove_person(connection, person_id)
 
     cursor = connection.cursor()
