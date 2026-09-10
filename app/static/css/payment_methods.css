@@ -1,0 +1,168 @@
+/* =========================
+   PAYMENT METHODS CONTENT
+   ========================= */
+
+.payment-methods-content {
+    min-height: 420px;
+}
+
+.payment-methods-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+}
+
+
+/* =========================
+   PAYMENT METHOD CARD
+   ========================= */
+
+.payment-method-card {
+    min-height: 138px;
+
+    display: flex;
+    align-items: center;
+
+    padding: 24px;
+
+    background: var(--surface);
+
+    border: 1px solid var(--border);
+    border-radius: 9px;
+
+    cursor: pointer;
+
+    transition:
+        border-color 0.15s ease,
+        box-shadow 0.15s ease,
+        transform 0.15s ease;
+}
+
+.payment-method-card:hover {
+    border-color: #c5d0dc;
+
+    box-shadow: 0 6px 18px rgba(15, 23, 42, 0.07);
+
+    transform: translateY(-2px);
+}
+
+
+/* =========================
+   PAYMENT METHOD ICON
+   ========================= */
+
+.payment-method-icon {
+    width: 58px;
+    height: 58px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    margin-right: 18px;
+
+    border-radius: 50%;
+
+    background: #d9f3ec;
+    color: #137c68;
+}
+
+.payment-method-icon svg {
+    width: 25px;
+    height: 25px;
+}
+
+
+/* =========================
+   PAYMENT METHOD INFO
+   ========================= */
+
+.payment-method-info {
+    min-width: 0;
+
+    flex: 1;
+}
+
+.payment-method-name-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    margin-bottom: 12px;
+}
+
+.payment-method-name-row h3 {
+    margin: 0;
+
+    overflow: hidden;
+
+    font-size: 16px;
+    font-weight: 650;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.payment-method-details {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px 18px;
+}
+
+.payment-method-detail {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    color: var(--muted-foreground);
+
+    font-size: 13px;
+}
+
+.payment-method-detail svg {
+    width: 15px;
+    height: 15px;
+
+    flex-shrink: 0;
+}
+
+
+/* =========================
+   CARD ARROW
+   ========================= */
+
+.payment-method-card-arrow {
+    width: 20px;
+    height: 20px;
+
+    flex-shrink: 0;
+
+    margin-left: 18px;
+
+    color: #a0aec0;
+
+    transition:
+        color 0.15s ease,
+        transform 0.15s ease;
+}
+
+.payment-method-card:hover .payment-method-card-arrow {
+    color: var(--primary);
+
+    transform: translateX(2px);
+}
+
+
+/* =========================
+   RESPONSIVE
+   ========================= */
+
+@media (max-width: 900px) {
+    .payment-methods-grid {
+        grid-template-columns: 1fr;
+    }
+}
+

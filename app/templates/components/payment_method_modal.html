@@ -1,0 +1,55 @@
+<div class="modal-overlay" id="payment-method-modal">
+    <div class="modal">
+        <div class="modal-header">
+            <div>
+                <h2 id="payment-method-modal-title">Adicionar Forma de Pagamento</h2>
+                <p>Preencha os dados da forma de pagamento.</p>
+            </div>
+
+            <button class="modal-close" id="close-payment-method-modal" type="button" aria-label="Fechar">
+                <i data-lucide="x"></i>
+            </button>
+        </div>
+
+        <form class="modal-form" id="payment-method-form" method="POST" action="{{ url_for('index.create_payment_method') }}">
+            <div class="form-grid">
+                <input type="hidden" id="payment-method-id" name="payment_method_id">
+
+                <div class="form-field full-width">
+                    <label for="payment-method-description">Descrição</label>
+                    <input type="text" id="payment-method-description" name="description" placeholder="Ex: PicPay" required>
+                </div>
+
+                <div class="form-field full-width">
+                    <label for="payment-method-type">Tipo</label>
+                    <select id="payment-method-type" name="payment_type" required>
+                        <option value="">Selecione o tipo</option>
+                        <option value="1">Dinheiro</option>
+                        <option value="2">Crédito</option>
+                    </select>
+                </div>
+
+                <div class="form-field">
+                    <label for="payment-method-closing-day">Dia de fechamento</label>
+                    <input type="number" id="payment-method-closing-day" name="closing_day" min="1" max="31" placeholder="Ex: 25">
+                </div>
+
+                <div class="form-field">
+                    <label for="payment-method-due-day">Dia de vencimento</label>
+                    <input type="number" id="payment-method-due-day" name="due_day" min="1" max="31" placeholder="Ex: 5">
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="delete-button" id="delete-payment-method-button" type="button" aria-label="Remover forma de pagamento">
+                    <i data-lucide="trash-2"></i>Remover
+                </button>
+
+                <div class="modal-actions">
+                    <button class="button-secondary" id="cancel-payment-method-modal" type="button">Cancelar</button>
+                    <button class="add-button" type="submit"><i data-lucide="save"></i>Salvar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -4,25 +4,128 @@
 
 {% block styles %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/pages.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/modal.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/payment_methods.css') }}">
 {% endblock %}
 
 {% block content %}
 <div class="page-header">
     <div class="page-title">
         <h1>Formas de Pagamento</h1>
-        <p>Gerencie suas formas de pagamento.</p>
+        <p>Gerencie as formas de pagamento utilizadas nas suas compras.</p>
     </div>
 
-    <button class="add-button" type="button">
-        <i data-lucide="plus"></i>
-        Adicionar Forma de Pagamento
+    <button class="add-button" id="add-payment-method-button" type="button">
+        <i data-lucide="plus"></i>Adicionar Forma de Pagamento
     </button>
 </div>
 
-<div class="records-container">
-    <div class="empty-state">
-        <i data-lucide="credit-card"></i>
-        <p>Nenhuma forma de pagamento encontrada.</p>
-    </div>
+
+<div class="page-toolbar">
+    <form class="search-form" method="GET" action="{{ url_for('index.payment_methods') }}">
+        <div class="search-box">
+            <input class="search-input" type="search" name="search" value="{{ search or '' }}" placeholder="Buscar formas de pagamento...">
+        </div>
+
+        <button class="search-button" type="submit" aria-label="Buscar formas de pagamento">
+            <i data-lucide="search"></i>
+        </button>
+    </form>
 </div>
+
+
+<div class="payment-methods-content">
+    {% if payment_methods %}
+        <div class="payment-methods-grid">
+            {% for payment_method in payment_methods %}
+                <div
+                    class="payment-method-card"
+                    data-payment-method-id="{{ payment_method.id }}"
+                    data-payment-method-description="{{ payment_method.description }}"
+                    data-payment-method-type="{{ payment_method.payment_type }}"
+                    data-payment-method-closing-day="{{ payment_method.closing_day or '' }}"
+                    data-payment-method-due-day="{{ payment_method.due_day or '' }}"
+                >
+                    <div class="payment-method-icon">
+                        {% if payment_method.payment_type == 2 %}
+                            <i data-lucide="credit-card"></i>
+                        {% else %}
+                            <i data-lucide="wallet"></i>
+                        {% endif %}
+                    </div>
+
+                    <div class="payment-method-info">
+                        <div class="payment-method-name-row">
+                            <h3>{{ payment_method.description }}</h3>
+                            <span class="status-badge active-status">
+                                <span class="status-dot"></span>Ativa
+                            </span>
+                        </div>
+
+                        <div class="payment-method-details">
+                            <div class="payment-method-detail">
+                                <i data-lucide="wallet-cards"></i>
+                                <span>
+                                    {% if payment_method.payment_type == 2 %}
+                                        Crédito
+                                    {% else %}
+                                        Dinheiro
+                                    {% endif %}
+                                </span>
+                            </div>
+
+                            <div class="payment-method-detail">
+                                <i data-lucide="calendar-clock"></i>
+                                <span>
+                                    Fechamento:
+                                    {{ payment_method.closing_day or "—" }}
+                                </span>
+                            </div>
+
+                            <div class="payment-method-detail">
+                                <i data-lucide="calendar-check"></i>
+                                <span>
+                                    Vencimento:
+                                    {{ payment_method.due_day or "—" }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <i data-lucide="chevron-right" class="payment-method-card-arrow"></i>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="pagination">
+            <span class="pagination-info">
+                Mostrando {{ start + 1 }}–{{ end }} de {{ total_payment_methods }} formas de pagamento
+            </span>
+
+            <div class="pagination-controls">
+                <a href="{{ url_for('index.payment_methods', page=page - 1, search=search) }}" class="pagination-button {% if page == 1 %}disabled{% endif %}">
+                    <i data-lucide="chevron-left"></i>
+                </a>
+
+                {% for page_number in range(1, total_pages + 1) %}
+                    <a href="{{ url_for('index.payment_methods', page=page_number, search=search) }}" class="pagination-button {% if page_number == page %}active{% endif %}">
+                        {{ page_number }}
+                    </a>
+                {% endfor %}
+
+                <a href="{{ url_for('index.payment_methods', page=page + 1, search=search) }}" class="pagination-button {% if page == total_pages %}disabled{% endif %}">
+                    <i data-lucide="chevron-right"></i>
+                </a>
+            </div>
+        </div>
+    {% else %}
+        <div class="empty-state payment-methods-empty-state">
+            <i data-lucide="credit-card"></i><p>Nenhuma forma de pagamento encontrada.</p>
+        </div>
+    {% endif %}
+</div>
+{% include "components/payment_method_modal.html" %}
+{% include "components/confirmation_modal.html" %}
+
+<script src="{{ url_for('static', filename='js/payment_methods.js') }}"></script>
 {% endblock %}

@@ -1,6 +1,7 @@
 import re
 
 from datetime import datetime
+from app.config import CREDIT
 
 def validate_required_string(value, field_name):
     if not isinstance(value, str) or not value.strip():
@@ -19,14 +20,8 @@ def validate_payment_days(closing_day, due_day):
     if due_day is None or closing_day is None:
         raise ValueError("closing_day and due_day must be provided together")
 
-    validate_positive_integer(due_day, "due_day")
-    validate_positive_integer(closing_day, "closing_day")
-
-    if due_day > 31:
-        raise ValueError("The due_day must be between 1 and 31.")
-
-    if closing_day > 31:
-        raise ValueError("The closing_day must be between 1 and 31.")
+    validate_integer_range(due_day, "due_day", 1, 31)
+    validate_integer_range(closing_day, "closing_day", 1, 31)
 
     if due_day == closing_day:
         raise ValueError("The due_day cannot be the same as the closing_day.")
@@ -71,4 +66,14 @@ def validate_phone(phone):
         raise ValueError("phone must have 10 or 11 digits")
 
 
+def validate_integer_range(value, field_name, minimum, maximum):
+    validate_positive_integer(value, field_name)
+
+    if value < minimum or value > maximum:
+        raise ValueError(f"{field_name} must be between {minimum} and {maximum}")
+
+
+def validate_credit_payment_days(payment_type, closing_day, due_day):
+    if payment_type == CREDIT and (closing_day is None or due_day is None):
+        raise ValueError("Credit payment methods must have closing_day and due_day")
 

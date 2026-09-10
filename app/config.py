@@ -5,4 +5,6 @@ DATABASE_PATH = BASE_DIR / "instance" / "database.db"
 
 ITEMS_PER_PAGE = 6
 
+CASH = 1
+CREDIT = 2
 
