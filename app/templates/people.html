@@ -21,7 +21,7 @@
 </div>
 
 
-<div class="people-toolbar">
+<div class="page-toolbar">
     <form class="search-form" method="GET" action="{{ url_for('index.people') }}">
         <div class="search-box">
             <input class="search-input" type="search" name="search" value="{{ search or '' }}" placeholder="Buscar pessoas...">
@@ -59,7 +59,7 @@
                         </div>
 
                         <div class="person-contact">
-                            <i data-lucide="phone"></i><span>{{ person.phone }}</span>
+                            <i data-lucide="phone"></i><span class="person-phone">{{ person.phone }}</span>
                         </div>
                     </div>
 
@@ -89,7 +89,7 @@
             </div>
         </div>
     {% else %}
-        <div class="empty-state people-empty-state">
+        <div class="empty-state">
             <i data-lucide="users"></i>
             <p>Nenhuma pessoa encontrada.</p>
         </div>

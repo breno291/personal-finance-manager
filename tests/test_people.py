@@ -86,7 +86,6 @@ def test_select_person_by_id(connection):
     assert selected_person[1] == "Gabi"
     assert selected_person[2] == "gabi@email.com"
     assert selected_person[3] == "81988888888"
-    assert selected_person[4] == 0
 
 
 def test_select_person_by_id_with_invalid_id(connection):

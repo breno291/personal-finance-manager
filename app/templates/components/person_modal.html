@@ -9,7 +9,7 @@
             <button class="modal-close" id="close-person-modal" type="button" aria-label="Fechar"><i data-lucide="x"></i></button>
         </div>
 
-        <form class="person-form" id="person-form" method="POST" action="{{ url_for('index.create_person') }}">
+        <form class="modal-form" id="person-form" method="POST" action="{{ url_for('index.create_person') }}">
             <div class="form-grid">
 				<input type="hidden" id="person-id" name="person_id">
                 <div class="form-field full-width">

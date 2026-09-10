@@ -12,6 +12,7 @@ const cancelPersonModal = document.getElementById("cancel-person-modal");
 const deletePersonButton = document.getElementById("delete-person-button");
 
 const personCards = document.querySelectorAll(".person-card");
+const personPhones = document.querySelectorAll(".person-phone");
 
 const personId = document.getElementById("person-id");
 const personName = document.getElementById("person-name");
@@ -51,44 +52,8 @@ function closePersonModal() {
     personModal.classList.remove("open");
 }
 
-
-// ==================================================
-// EVENTOS - PESSOA
-// ==================================================
-
-addPersonButton.addEventListener("click", openPersonModal);
-closePersonModalButton.addEventListener("click", closePersonModal);
-cancelPersonModal.addEventListener("click", closePersonModal);
-
-personModal.addEventListener("click", function (event) {
-    if (event.target === personModal) {
-        closePersonModal();
-    }
-});
-
-personCards.forEach(function (card) {
-    card.addEventListener("click", function () {
-        personModalTitle.textContent = "Editar Pessoa";
-
-        personId.value = card.dataset.personId;
-        personName.value = card.dataset.personName;
-        personEmail.value = card.dataset.personEmail;
-        personPhone.value = card.dataset.personPhone;
-
-        personForm.action = `/people/${personId.value}/edit`;
-
-        deletePersonButton.classList.add("visible");
-        personModal.classList.add("open");
-    });
-});
-
-
-// ==================================================
-// EVENTOS - TELEFONE
-// ==================================================
-
-personPhone.addEventListener("input", function () {
-    let phone = this.value.replace(/\D/g, "");
+function formatPhone(value) {
+    let phone = value.replace(/\D/g, "");
 
     phone = phone.slice(0, 11);
 
@@ -114,7 +79,51 @@ personPhone.addEventListener("input", function () {
         );
     }
 
-    this.value = phone;
+    return phone;
+}
+
+
+// ==================================================
+// EVENTOS - PESSOA
+// ==================================================
+
+addPersonButton.addEventListener("click", openPersonModal);
+closePersonModalButton.addEventListener("click", closePersonModal);
+cancelPersonModal.addEventListener("click", closePersonModal);
+
+personModal.addEventListener("click", function (event) {
+    if (event.target === personModal) {
+        closePersonModal();
+    }
+});
+
+personCards.forEach(function (card) {
+    card.addEventListener("click", function () {
+        personModalTitle.textContent = "Editar Pessoa";
+
+        personId.value = card.dataset.personId;
+        personName.value = card.dataset.personName;
+        personEmail.value = card.dataset.personEmail;
+        personPhone.value = formatPhone(card.dataset.personPhone);
+
+        personForm.action = `/people/${personId.value}/edit`;
+
+        deletePersonButton.classList.add("visible");
+        personModal.classList.add("open");
+    });
+});
+
+
+// ==================================================
+// TELEFONE
+// ==================================================
+
+personPhones.forEach(function (phone) {
+    phone.textContent = formatPhone(phone.textContent);
+});
+
+personPhone.addEventListener("input", function () {
+    this.value = formatPhone(this.value);
 });
 
 
@@ -131,6 +140,5 @@ confirmationNo.addEventListener("click", function () {
 });
 
 confirmationYes.addEventListener("click", function () {
-	// confirmationModal.classList.remove("open");
-    confirmationModalForm.action = `/people/${personId.value}/remove`; 
+    confirmationModalForm.action = `/people/${personId.value}/remove`;
 });

@@ -29,7 +29,7 @@ def insert_person(connection, name, email, phone):
 def select_person_by_id(connection, person_id):
     validate_positive_integer(person_id, "person_id")
 
-    query = "SELECT * FROM people WHERE id = ? AND removed = ?"
+    query = "SELECT id, name, email, phone FROM people WHERE id = ? AND removed = ?"
     cursor = connection.cursor()
     cursor.execute(query, (person_id, 0))
 
