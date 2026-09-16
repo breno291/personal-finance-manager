@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/favicon.svg') }}">
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
 
@@ -23,22 +24,22 @@
         </div>
 
         <nav class="sidebar-nav">
-            <a href="{{ url_for('index.purchases') }}" class="nav-item {% if request.path == '/' or request.path == '/purchases' %}active{% endif %}">
+            <a href="{{ url_for('purchases.purchases') }}" class="nav-item {% if request.path == '/' or request.path == '/purchases' %}active{% endif %}">
                 <i data-lucide="shopping-cart" class="nav-icon"></i>
                 <span class="nav-text">Compras</span>
             </a>
 
-            <a href="{{ url_for('index.payment_methods') }}" class="nav-item {% if request.path == '/payment-methods' %}active{% endif %}">
+            <a href="{{ url_for('payment_methods.payment_methods') }}" class="nav-item {% if request.path == '/payment-methods' %}active{% endif %}">
                 <i data-lucide="credit-card" class="nav-icon"></i>
                 <span class="nav-text">Formas de Pagamento</span>
             </a>
 
-            <a href="{{ url_for('index.transactions') }}" class="nav-item {% if request.path == '/transactions' %}active{% endif %}">
+            <a href="{{ url_for('transactions.transactions') }}" class="nav-item {% if request.path == '/transactions' %}active{% endif %}">
                 <i data-lucide="receipt-text" class="nav-icon"></i>
                 <span class="nav-text">Lançamentos</span>
             </a>
 
-            <a href="{{ url_for('index.people') }}" class="nav-item {% if request.path == '/people' %}active{% endif %}">
+            <a href="{{ url_for('people.people') }}" class="nav-item {% if request.path == '/people' %}active{% endif %}">
                 <i data-lucide="users" class="nav-icon"></i>
                 <span class="nav-text">Pessoas</span>
             </a>

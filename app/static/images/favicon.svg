@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 42 42">
+    <circle
+        cx="21"
+        cy="21"
+        r="19"
+        fill="none"
+        stroke="#20d6b2"
+        stroke-width="2"
+    />
+    <text
+        x="21"
+        y="22"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        fill="#20d6b2"
+        font-family="Arial, sans-serif"
+        font-size="22"
+        font-weight="500"
+    >$</text>
+</svg>
