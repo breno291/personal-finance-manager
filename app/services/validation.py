@@ -77,3 +77,17 @@ def validate_credit_payment_days(payment_type, closing_day, due_day):
     if payment_type == CREDIT and (closing_day is None or due_day is None):
         raise ValueError("Credit payment methods must have closing_day and due_day")
 
+
+def currency_to_cents(value):
+    value = value.replace("R$", "")
+    value = value.replace("\xa0", "")
+    value = value.replace(".", "")
+    value = value.replace(",", "")
+
+    return int(value)
+
+
+def html_date_to_br_date(value):
+    year, month, day = value.split("-")
+
+    return f"{day}/{month}/{year}"

@@ -1,6 +1,6 @@
-import sqlite3
 from app.services.validation import validate_required_string, validate_positive_integer, validate_payment_days, validate_integer_range, validate_credit_payment_days
 from app.config import CREDIT, CASH
+
 
 def insert_payment_method(connection, description, payment_type, closing_day, due_day):
     validate_required_string(description, "description")
@@ -8,23 +8,14 @@ def insert_payment_method(connection, description, payment_type, closing_day, du
     validate_credit_payment_days(payment_type, closing_day, due_day)
     validate_payment_days(closing_day, due_day)
 
-    try:
-        description = description.strip()
-        query = (
-            "INSERT INTO payment_methods "
-            "(description, payment_type, closing_day, due_day) "
-            "VALUES (?, ?, ?, ?)"
-        )
-        values = (description, payment_type, closing_day, due_day)
+    description = description.strip()
+    query = ("INSERT INTO payment_methods (description, payment_type, closing_day, due_day) VALUES (?, ?, ?, ?)")
+    values = (description, payment_type, closing_day, due_day)
 
-        cursor = connection.cursor()
-        cursor.execute(query, values)
-        connection.commit()
+    cursor = connection.cursor()
+    cursor.execute(query, values)
 
-        return cursor.lastrowid
-    except sqlite3.Error:
-        connection.rollback()
-        raise
+    return cursor.lastrowid
 
 
 def select_payment_method_by_id(connection, payment_method_id):
@@ -76,45 +67,31 @@ def count_payment_methods(connection, search=None):
 
 
 def update_payment_method(connection, payment_method_id, description, payment_type, closing_day, due_day):
+    validate_positive_integer(payment_method_id, "payment_method_id")
     validate_required_string(description, "description")
     validate_integer_range(payment_type, "payment_type", CASH, CREDIT)
     validate_credit_payment_days(payment_type, closing_day, due_day)
     validate_payment_days(closing_day, due_day)
 
+    description = description.strip()
+    query = "UPDATE payment_methods SET description=?, payment_type=?, closing_day=?, due_day=? WHERE id=?"
+    values = (description, payment_type, closing_day, due_day, payment_method_id)
 
-    try:
-        description = description.strip()
-        query = "UPDATE payment_methods SET description=?, payment_type=?, closing_day=?, due_day=? WHERE id=?"
-        values = (description, payment_type, closing_day, due_day, payment_method_id)
+    cursor = connection.cursor()
+    cursor.execute(query, values)
 
-        cursor = connection.cursor()
-        cursor.execute(query, values)
-        connection.commit()
-
-        if cursor.rowcount == 0:
-            raise ValueError("payment_method not found")
-
-    except sqlite3.Error:
-        connection.rollback()
-        raise
+    if cursor.rowcount == 0:
+        raise ValueError("payment_method not found")
 
 
 def remove_payment_method(connection, payment_method_id):
     validate_positive_integer(payment_method_id, "payment_method_id")
 
-    try:
-        query = "UPDATE payment_methods SET removed=? WHERE id=?"
-        values = (1, payment_method_id)
+    query = "UPDATE payment_methods SET removed=? WHERE id=?"
+    values = (1, payment_method_id)
 
-        cursor = connection.cursor()
-        cursor.execute(query, values)
-        if cursor.rowcount == 0:
-            raise ValueError("payment_methods not found")
+    cursor = connection.cursor()
+    cursor.execute(query, values)
 
-        connection.commit()
-
-    except sqlite3.Error:
-        connection.rollback()
-        raise
-
-
+    if cursor.rowcount == 0:
+        raise ValueError("payment_methods not found")

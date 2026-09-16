@@ -1,6 +1,5 @@
-import sqlite3
-
 from app.services.validation import validate_required_string, validate_positive_integer, validate_email, validate_phone
+
 
 def insert_person(connection, name, email, phone):
     validate_required_string(name, "name")
@@ -11,19 +10,13 @@ def insert_person(connection, name, email, phone):
     email = email.strip()
     phone = phone.strip()
 
-    try:
-        query = "INSERT INTO people (name, email, phone) VALUES (?, ?, ?)"
-        values = (name, email, phone)
+    query = "INSERT INTO people (name, email, phone) VALUES (?, ?, ?)"
+    values = (name, email, phone)
 
-        cursor = connection.cursor()
-        cursor.execute(query, values)
-        connection.commit()
+    cursor = connection.cursor()
+    cursor.execute(query, values)
 
-        return cursor.lastrowid
-
-    except sqlite3.Error:
-        connection.rollback()
-        raise
+    return cursor.lastrowid
 
 
 def select_person_by_id(connection, person_id):
@@ -83,41 +76,24 @@ def update_person(connection, person_id, name, email, phone):
     email = email.strip()
     phone = phone.strip()
 
-    try:
-        query = "UPDATE people SET name=?, email=?, phone=? WHERE id=?"
-        values = (name, email, phone, person_id)
+    query = "UPDATE people SET name=?, email=?, phone=? WHERE id=?"
+    values = (name, email, phone, person_id)
 
-        cursor = connection.cursor()
-        cursor.execute(query, values)
+    cursor = connection.cursor()
+    cursor.execute(query, values)
 
-        if cursor.rowcount == 0:
-            raise ValueError("person not found")
-
-        connection.commit()
-
-    except sqlite3.Error:
-        connection.rollback()
-        raise
+    if cursor.rowcount == 0:
+        raise ValueError("person not found")
 
 
 def remove_person(connection, person_id):
     validate_positive_integer(person_id, "person_id")
 
-    try:
-        query = "UPDATE people SET removed=? WHERE id=?"
-        values = (1, person_id)
+    query = "UPDATE people SET removed=? WHERE id=?"
+    values = (1, person_id)
 
-        cursor = connection.cursor()
-        cursor.execute(query, values)
-        if cursor.rowcount == 0:
-            raise ValueError("person not found")
+    cursor = connection.cursor()
+    cursor.execute(query, values)
 
-        connection.commit()
-
-    except sqlite3.Error:
-        connection.rollback()
-        raise
-
-
-
-
+    if cursor.rowcount == 0:
+        raise ValueError("person not found")
