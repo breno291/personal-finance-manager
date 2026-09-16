@@ -22,7 +22,7 @@
 
 
 <div class="page-toolbar">
-    <form class="search-form" method="GET" action="{{ url_for('index.people') }}">
+    <form class="search-form" method="GET" action="{{ url_for('people.people') }}">
         <div class="search-box">
             <input class="search-input" type="search" name="search" value="{{ search or '' }}" placeholder="Buscar pessoas...">
         </div>
@@ -73,17 +73,17 @@
             </span>
 
             <div class="pagination-controls">
-                <a href="{{ url_for('index.people', page=page - 1, search=search) }}" class="pagination-button {% if page == 1 %}disabled{% endif %}">
+                <a href="{{ url_for('people.people', page=page - 1, search=search) }}" class="pagination-button {% if page == 1 %}disabled{% endif %}">
                     <i data-lucide="chevron-left"></i>
                 </a>
 
                 {% for page_number in range(1, total_pages + 1) %}
-                    <a href="{{ url_for('index.people', page=page_number, search=search) }}" class="pagination-button {% if page_number == page %}active{% endif %}">
+                    <a href="{{ url_for('people.people', page=page_number, search=search) }}" class="pagination-button {% if page_number == page %}active{% endif %}">
                         {{ page_number }}
                     </a>
                 {% endfor %}
 
-                <a href="{{ url_for('index.people', page=page + 1, search=search) }}" class="pagination-button {% if page == total_pages %}disabled{% endif %}">
+                <a href="{{ url_for('people.people', page=page + 1, search=search) }}" class="pagination-button {% if page == total_pages %}disabled{% endif %}">
                     <i data-lucide="chevron-right"></i>
                 </a>
             </div>
