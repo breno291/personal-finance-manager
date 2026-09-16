@@ -4,6 +4,9 @@
 
 {% block styles %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/pages.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/modal.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/purchases.css') }}">
+<link rel="stylesheet" href="https://cdn.datatables.net/3.0.3/css/dataTables.dataTables.css">
 {% endblock %}
 
 {% block content %}
@@ -13,16 +16,73 @@
         <p>Gerencie suas compras.</p>
     </div>
 
-    <button class="add-button" type="button">
-        <i data-lucide="plus"></i>
-        Adicionar Compra
+    <button class="add-button" type="button" id="add-purchase-button">
+        <i data-lucide="plus"></i>Adicionar Compra
     </button>
 </div>
 
-<div class="records-container">
-    <div class="empty-state">
-        <i data-lucide="shopping-cart"></i>
-        <p>Nenhuma compra encontrada.</p>
+<div class="purchases-toolbar">
+
+    <div class="purchases-search">
+        <i data-lucide="search"></i>
+        <input type="search" id="purchases-search" placeholder="Buscar compras...">
     </div>
+
+    <div class="purchases-filter-group">
+        <label for="payment-method-filter">Forma de pagamento</label>
+
+        <select id="payment-method-filter" class="purchases-filter">
+            <option value="">Todas as formas</option>
+        </select>
+    </div>
+
+    <div class="purchases-filter-group">
+        <label for="purchase-month-filter">Mês da compra</label>
+        <select id="purchase-month-filter" class="purchases-filter">
+            <option value="">Todos os meses</option>
+        </select>
+    </div>
+
+    <button type="button" id="clear-filters" class="purchases-clear-filters">
+        <i data-lucide="x"></i>Limpar filtros
+    </button>
 </div>
+<div class="purchases-table-wrapper">
+    <table class="purchases-table" id="purchases-table">
+        <thead>
+            <tr>
+                <th>Data</th>
+                <th>Descrição</th>
+                <th>Valor</th>
+                <th>Parcelas</th>
+                <th>Forma de pagamento</th>
+                <th>Categoria</th>
+                <th>Subcategoria</th>
+                <th>Status</th>
+                <th>Criada em</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for purchase in purchases %}
+                <tr data-purchase-id="{{ purchase.id }}">
+                    <td data-order="{{ purchase.purchase_date_order }}">{{ purchase.purchase_date }}</td>
+                    <td>{{ purchase.description }}</td>
+                    <td>{{ purchase.value }}</td>
+                    <td>{{ purchase.installment_count }}</td>
+                    <td>{{ purchase.payment_method }}</td>
+                    <td>{{ purchase.category }}</td>
+                    <td>{{ purchase.subcategory }}</td>
+                    <td>Status</td>
+                    <td data-order="{{ purchase.created_at_order }}">{{ purchase.created_at }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% include "components/purchase_modal.html" %}
+{% include "components/confirmation_modal.html" %}
+<script src="https://cdn.datatables.net/3.0.3/js/dataTables.js"></script>
+<script src="{{ url_for('static', filename='js/transactions.js') }}"></script>
+<script src="{{ url_for('static', filename='js/purchases.js') }}"></script>
 {% endblock %}
