@@ -16,70 +16,74 @@
 </head>
 
 <body>
-<div class="app" id="app">
-    <aside class="sidebar">
-        <div class="brand">
-            <div class="brand-icon">$</div>
-            <div class="brand-name"> Personal Finance <span>Manager</span> </div>
-        </div>
+    <div class="app" id="app">
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="brand-icon">$</div>
 
-        <nav class="sidebar-nav">
-            <a href="{{ url_for('purchases.purchases') }}" class="nav-item {% if request.path == '/' or request.path == '/purchases' %}active{% endif %}">
-                <i data-lucide="shopping-cart" class="nav-icon"></i>
-                <span class="nav-text">Compras</span>
-            </a>
+                <div class="brand-name">
+                    Personal Finance
+                    <span>Manager</span>
+                </div>
+            </div>
 
-            <a href="{{ url_for('payment_methods.payment_methods') }}" class="nav-item {% if request.path == '/payment-methods' %}active{% endif %}">
-                <i data-lucide="credit-card" class="nav-icon"></i>
-                <span class="nav-text">Formas de Pagamento</span>
-            </a>
+            <nav class="sidebar-nav">
+                <a href="{{ url_for('purchases.purchases') }}" class="nav-item {% if request.path == '/' or request.path == '/purchases' %}active{% endif %}"> 
+                    <i data-lucide="shopping-cart" class="nav-icon"></i> <span class="nav-text">Compras</span>
+                </a>
 
-            <a href="{{ url_for('transactions.transactions') }}" class="nav-item {% if request.path == '/transactions' %}active{% endif %}">
-                <i data-lucide="receipt-text" class="nav-icon"></i>
-                <span class="nav-text">Lançamentos</span>
-            </a>
+                <a href="{{ url_for('payment_methods.payment_methods') }}" class="nav-item {% if request.path == '/payment-methods' %}active{% endif %}"> 
+                    <i data-lucide="credit-card" class="nav-icon"></i> <span class="nav-text">Formas de Pagamento</span>
+                </a>
 
-            <a href="{{ url_for('people.people') }}" class="nav-item {% if request.path == '/people' %}active{% endif %}">
-                <i data-lucide="users" class="nav-icon"></i>
-                <span class="nav-text">Pessoas</span>
-            </a>
-        </nav>
+                <a href="{{ url_for('transactions.transactions') }}" class="nav-item {% if request.path == '/transactions' %}active{% endif %}">
+                    <i data-lucide="receipt-text" class="nav-icon"></i><span class="nav-text">Lançamentos</span>
+                </a>
 
-        <div class="sidebar-footer">
-            <a href="#" class="nav-item">
-                <i data-lucide="settings" class="nav-icon"></i>
-                <span class="nav-text">Configurações</span>
-            </a>
+                <a href="{{ url_for('people.people') }}" class="nav-item {% if request.path == '/people' %}active{% endif %}">
+                    <i data-lucide="users" class="nav-icon"></i><span class="nav-text">Pessoas</span>
+                </a>
+            </nav>
 
-            <a href="#" class="nav-item">
-                <i data-lucide="log-out" class="nav-icon"></i>
-                <span class="nav-text">Sair</span>
-            </a>
-        </div>
-    </aside>
+            <div class="sidebar-footer">
+                <a href="#" class="nav-item">
+                    <i data-lucide="settings" class="nav-icon"></i><span class="nav-text">Configurações</span>
+                </a>
 
-    <div class="page">
-        <header class="topbar">
-            <button class="menu-button" id="menu-button" type="button" aria-label="Fechar menu">
-                <i data-lucide="panel-left-close" id="menu-icon"></i>
-            </button>
+                <a href="#" class="nav-item">
+                    <i data-lucide="log-out" class="nav-icon"></i><span class="nav-text">Sair</span>
+                </a>
+            </div>
+        </aside>
 
-            <div class="topbar-user">
-                <button class="notification-button" type="button" aria-label="Notificações">
-                    <i data-lucide="bell"></i>
+        <div class="page">
+            <header class="topbar">
+                <button class="menu-button" id="menu-button" type="button" aria-label="Fechar menu">
+                    <i data-lucide="panel-left-close" id="menu-icon"></i>
                 </button>
 
-                <div class="user-avatar">BF</div>
-                <span class="user-name">Breno</span>
-                <i data-lucide="chevron-down" class="user-arrow"></i>
-            </div>
-        </header>
+                <div class="topbar-user">
+                    <button class="notification-button" type="button" aria-label="Notificações">
+                        <i data-lucide="bell"></i>
+                    </button>
 
-        <main class="content"> {% block content %}{% endblock %} </main>
+                    <div class="user-avatar">BF</div>
+
+                    <span class="user-name">Breno</span>
+
+                    <i data-lucide="chevron-down" class="user-arrow"></i>
+                </div>
+            </header>
+
+            <main class="content">
+                {% block content %}{% endblock %}
+            </main>
+        </div>
     </div>
-</div>
 
-<script src="https://unpkg.com/lucide@latest"></script>
-<script src="{{ url_for('static', filename='js/base.js') }}"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="{{ url_for('static', filename='js/base.js') }}"></script>
+
+    {% block scripts %}{% endblock %}
 </body>
 </html>

@@ -6,99 +6,40 @@
                 <p>Preencha os dados da compra.</p>
             </div>
 
-            <button
-                class="modal-close"
-                id="close-purchase-modal"
-                type="button"
-                aria-label="Fechar"
-            >
+            <button class="modal-close" id="close-purchase-modal" type="button" aria-label="Fechar">
                 <i data-lucide="x"></i>
             </button>
         </div>
 
-        <form
-            class="modal-form"
-            id="purchase-form"
-            method="POST"
-            action="{{ url_for('purchases.create_purchase') }}"
-        >
+        <form class="modal-form" id="purchase-form" method="POST" action="{{ url_for('purchases.create_purchase') }}">
             <div class="modal-body">
                 <div class="form-grid">
                     <div class="form-field full-width">
-                        <label for="purchase-description">
-                            Descrição
-                        </label>
-
-                        <input
-                            type="text"
-                            id="purchase-description"
-                            name="description"
-                            placeholder="Digite a descrição"
-                            required
-                        >
+                        <label for="purchase-description">Descrição</label>
+                        <input type="text" id="purchase-description" name="description" placeholder="Digite a descrição" required>
                     </div>
 
                     <div class="form-field">
-                        <label for="purchase-date">
-                            Data da compra
-                        </label>
-
-                        <input
-                            type="date"
-                            id="purchase-date"
-                            name="purchase_date"
-                            required
-                        >
+                        <label for="purchase-date">Data da compra</label>
+                        <input type="date" id="purchase-date" name="purchase_date" required>
                     </div>
 
                     <div class="form-field">
-                        <label for="purchase-value">
-                            Valor total
-                        </label>
-
-                        <input
-                            type="text"
-                            id="purchase-value"
-                            name="value"
-                            placeholder="R$ 0,00"
-                            inputmode="numeric"
-                            required
-                        >
+                        <label for="purchase-value">Valor total</label>
+                        <input type="text" id="purchase-value" name="value" placeholder="R$ 0,00" inputmode="numeric" required>
                     </div>
 
                     <div class="form-field">
-                        <label for="purchase-installments">
-                            Parcelas
-                        </label>
-
-                        <input
-                            type="number"
-                            id="purchase-installments"
-                            name="installment_count"
-                            min="1"
-                            value="1"
-                            required
-                        >
+                        <label for="purchase-installments">Parcelas</label>
+                        <input type="number" id="purchase-installments" name="installment_count" min="1" value="1" required>
                     </div>
 
                     <div class="form-field">
-                        <label for="purchase-payment-method">
-                            Forma de pagamento
-                        </label>
-
-                        <select
-                            id="purchase-payment-method"
-                            name="payment_method_id"
-                            required
-                        >
+                        <label for="purchase-payment-method">Forma de pagamento</label>
+                        <select id="purchase-payment-method" name="payment_method_id" required>
                             <option value="">Selecione</option>
-
                             {% for payment_method in payment_methods %}
-                                <option
-                                    value="{{ payment_method.id }}"
-                                    data-closing-day="{{ payment_method.closing_day or '' }}"
-                                    data-due-day="{{ payment_method.due_day or '' }}"
-                                >
+                                <option value="{{ payment_method.id }}" data-closing-day="{{ payment_method.closing_day or '' }}" data-due-day="{{ payment_method.due_day or '' }}">
                                     {{ payment_method.description }}
                                 </option>
                             {% endfor %}
@@ -106,115 +47,61 @@
                     </div>
 
                     <div class="form-field">
-                        <label for="purchase-category">
-                            Categoria
-                        </label>
-
-                        <select
-                            id="purchase-category"
-                            name="category_id"
-                            required
-                        >
+                        <label for="purchase-category">Categoria</label>
+                        <select id="purchase-category" name="category_id" required>
                             <option value="">Selecione</option>
-
                             {% for category_id, category in categories.items() %}
-                                <option value="{{ category_id }}">
-                                    {{ category }}
-                                </option>
+                                <option value="{{ category_id }}">{{ category }}</option>
                             {% endfor %}
                         </select>
                     </div>
 
                     <div class="form-field">
-                        <label for="purchase-subcategory">
-                            Subcategoria
-                        </label>
-
-                        <select
-                            id="purchase-subcategory"
-                            name="subcategory_id"
-                            required
-                        >
+                        <label for="purchase-subcategory">Subcategoria</label>
+                        <select id="purchase-subcategory" name="subcategory_id" required>
                             <option value="">Selecione</option>
-
                             {% for subcategory_id, subcategory in subcategories.items() %}
-                                <option value="{{ subcategory_id }}">
-                                    {{ subcategory }}
-                                </option>
+                                <option value="{{ subcategory_id }}">{{ subcategory }}</option>
                             {% endfor %}
                         </select>
                     </div>
 
-                    <div
-                        class="form-field hidden"
-                        id="first-due-date-field"
-                    >
-                        <label for="first-due-date">
-                            Vencimento da primeira parcela
-                        </label>
-
-                        <input
-                            type="date"
-                            id="first-due-date"
-                        >
+                    <div class="form-field hidden" id="first-due-date-field">
+                        <label for="first-due-date">Vencimento da primeira parcela</label>
+                        <input type="date" id="first-due-date">
                     </div>
                 </div>
 
                 <!-- =========================
-                     LANÇAMENTOS
-                ========================== -->
+                     TRANSACTIONS
+                     ========================= -->
 
-                <div
-                    class="transactions-section hidden"
-                    id="transactions-section"
-                >
+                <div class="transactions-section hidden" id="transactions-section">
                     <h3>Lançamentos</h3>
-
                     <div id="installment-groups"></div>
                 </div>
 
                 <!-- =========================
-                     PESSOAS
-                ========================== -->
+                     PEOPLE OPTIONS
+                     ========================= -->
 
                 <template id="person-options-template">
                     <option value="">Selecione</option>
 
                     {% for person in people %}
-                        <option value="{{ person.id }}">
-                            {{ person.name }}
-                        </option>
+                        <option value="{{ person.id }}">{{ person.name }}</option>
                     {% endfor %}
                 </template>
             </div>
 
             <div class="modal-footer">
-                <button
-                    class="delete-button"
-                    id="delete-purchase-button"
-                    type="button"
-                    aria-label="Remover compra"
-                >
-                    <i data-lucide="trash-2"></i>
-                    Remover
+                <button class="delete-button" id="delete-purchase-button" type="button" aria-label="Remover compra">
+                    <i data-lucide="trash-2"></i>Remover
                 </button>
 
                 <div class="modal-actions">
-                    <button
-                        class="button-secondary"
-                        id="cancel-purchase-modal"
-                        type="button"
-                    >
-                        Cancelar
-                    </button>
-
-                    <button
-                        class="add-button"
-                        type="submit"
-                    >
-                        <i data-lucide="save"></i>
-                        Salvar
-                    </button>
+                    <button class="button-secondary" id="cancel-purchase-modal" type="button">Cancelar</button>
+                    <button class="add-button" type="submit"><i data-lucide="save"></i>Salvar</button>
                 </div>
             </div>
         </form>

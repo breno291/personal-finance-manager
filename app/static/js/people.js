@@ -1,5 +1,5 @@
 // ==================================================
-// ELEMENTOS - PESSOA
+// PERSON ELEMENTS
 // ==================================================
 
 const personModal = document.getElementById("person-modal");
@@ -21,17 +21,7 @@ const personPhone = document.getElementById("person-phone");
 
 
 // ==================================================
-// ELEMENTOS - CONFIRMAÇÃO
-// ==================================================
-
-const confirmationModal = document.getElementById("confirmation-modal");
-const confirmationModalForm = document.getElementById("modal-form");
-const confirmationNo = document.getElementById("confirmation-no");
-const confirmationYes = document.getElementById("confirmation-yes");
-
-
-// ==================================================
-// FUNÇÕES - PESSOA
+// PERSON FUNCTIONS
 // ==================================================
 
 function openPersonModal() {
@@ -52,31 +42,24 @@ function closePersonModal() {
     personModal.classList.remove("open");
 }
 
+
+// ==================================================
+// PHONE FUNCTIONS
+// ==================================================
+
 function formatPhone(value) {
     let phone = value.replace(/\D/g, "");
 
     phone = phone.slice(0, 11);
 
     if (phone.length > 10) {
-        phone = phone.replace(
-            /^(\d{2})(\d{5})(\d{0,4}).*/,
-            "($1) $2-$3"
-        );
+        phone = phone.replace(/^(\d{2})(\d{5})(\d{0,4}).*/, "($1) $2-$3");
     } else if (phone.length > 6) {
-        phone = phone.replace(
-            /^(\d{2})(\d{4})(\d{0,4}).*/,
-            "($1) $2-$3"
-        );
+        phone = phone.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, "($1) $2-$3");
     } else if (phone.length > 2) {
-        phone = phone.replace(
-            /^(\d{2})(\d{0,5})/,
-            "($1) $2"
-        );
+        phone = phone.replace(/^(\d{2})(\d{0,5})/, "($1) $2");
     } else if (phone.length > 0) {
-        phone = phone.replace(
-            /^(\d{0,2})/,
-            "($1"
-        );
+        phone = phone.replace(/^(\d{0,2})/, "($1");
     }
 
     return phone;
@@ -84,7 +67,7 @@ function formatPhone(value) {
 
 
 // ==================================================
-// EVENTOS - PESSOA
+// PERSON EVENTS
 // ==================================================
 
 addPersonButton.addEventListener("click", openPersonModal);
@@ -113,9 +96,13 @@ personCards.forEach(function (card) {
     });
 });
 
+deletePersonButton.addEventListener("click", function () {
+    openConfirmationModal(`/people/${personId.value}/remove`);
+});
+
 
 // ==================================================
-// TELEFONE
+// PHONE EVENTS
 // ==================================================
 
 personPhones.forEach(function (phone) {
@@ -124,21 +111,4 @@ personPhones.forEach(function (phone) {
 
 personPhone.addEventListener("input", function () {
     this.value = formatPhone(this.value);
-});
-
-
-// ==================================================
-// EVENTOS - CONFIRMAÇÃO
-// ==================================================
-
-deletePersonButton.addEventListener("click", function () {
-    confirmationModal.classList.add("open");
-});
-
-confirmationNo.addEventListener("click", function () {
-    confirmationModal.classList.remove("open");
-});
-
-confirmationYes.addEventListener("click", function () {
-    confirmationModalForm.action = `/people/${personId.value}/remove`;
 });

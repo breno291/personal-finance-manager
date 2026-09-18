@@ -1,375 +1,6 @@
 /* =========================
-   Toolbar
-========================= */
-
-.purchases-toolbar {
-    display: flex;
-    align-items: flex-end;
-
-    gap: 16px;
-    margin-bottom: 24px;
-}
-
-
-/* =========================
-   Search
-========================= */
-
-.purchases-search {
-    display: flex;
-    position: relative;
-
-    gap: 8px;
-}
-
-.purchases-search svg {
-    position: absolute;
-    left: 14px;
-    top: 50%;
-
-    width: 17px;
-    height: 17px;
-
-    color: #a0aec0;
-
-    transform: translateY(-50%);
-    pointer-events: none;
-}
-
-.purchases-search input {
-    width: 264px;
-    height: 44px;
-
-    padding: 0 14px;
-
-    color: #1a202c;
-    font: inherit;
-    font-size: 14px;
-
-    background-color: #ffffff;
-
-    border: 1px solid #e2e8f0;
-    border-radius: 7px;
-
-    outline: none;
-    padding-left: 40px;
-}
-
-.purchases-search input::placeholder {
-    color: #a0aec0;
-}
-
-.purchases-search input:focus {
-    border-color: #14a58c;
-}
-
-.purchases-search-button {
-    width: 44px;
-    height: 44px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    color: #4a5568;
-
-    background-color: #ffffff;
-
-    border: 1px solid #e2e8f0;
-    border-radius: 7px;
-
-    cursor: pointer;
-}
-
-.purchases-search-button:hover {
-    background-color: #f8fafc;
-}
-
-.purchases-search-button svg {
-    width: 18px;
-    height: 18px;
-}
-
-
-/* =========================
-   Filters
-========================= */
-
-.purchases-filter-group {
-    display: flex;
-    flex-direction: column;
-
-    gap: 6px;
-}
-
-.purchases-filter-group label {
-    color: #718096;
-    font-size: 12px;
-    font-weight: 500;
-}
-
-.purchases-filter {
-    min-width: 220px;
-    height: 44px;
-
-    padding: 0 36px 0 14px;
-
-    color: #1a202c;
-    font: inherit;
-    font-size: 14px;
-
-    background-color: #ffffff;
-
-    border: 1px solid #e2e8f0;
-    border-radius: 7px;
-
-    outline: none;
-    cursor: pointer;
-}
-
-.purchases-filter:focus {
-    border-color: #14a58c;
-}
-
-
-/* =========================
-   Table Wrapper
-========================= */
-
-.purchases-table-wrapper {
-    width: 100%;
-    overflow-x: auto;
-
-    background-color: #ffffff;
-
-    border: 1px solid #e2e8f0;
-    border-radius: 10px;
-}
-
-
-/* =========================
-   Table
-========================= */
-
-.purchases-table {
-    width: 100% !important;
-
-    margin: 0 !important;
-
-    border-collapse: collapse !important;
-
-    font-size: 14px;
-}
-
-.purchases-table thead {
-    background-color: #f8fafc;
-}
-
-.purchases-table th {
-    height: 44px;
-
-    padding: 0 16px !important;
-
-    color: #718096;
-    font-size: 12px;
-    font-weight: 600;
-    text-align: left;
-    text-transform: uppercase;
-    white-space: nowrap;
-
-    background-color: #f8fafc;
-
-    border-bottom: 1px solid #e2e8f0 !important;
-}
-
-.purchases-table td {
-    height: 46px;
-
-    padding: 0 16px !important;
-
-    color: #1a202c;
-    font-size: 14px;
-
-    border-bottom: 1px solid #edf2f7 !important;
-}
-
-.purchases-table tbody tr:hover {
-    background-color: #f8fafc;
-}
-
-.purchases-table tbody tr:last-child td {
-    border-bottom: none !important;
-}
-
-
-/* =========================
-   Empty State
-========================= */
-
-.purchases-content {
-    min-height: 420px;
-
-    display: flex;
-
-    background: var(--surface);
-
-    border: 1px solid var(--border);
-    border-radius: 8px;
-}
-
-.purchases-empty td {
-    padding: 48px 16px;
-
-    color: #718096;
-    text-align: center;
-}
-
-
-/* =========================
-   DataTables Layout
-========================= */
-
-.purchases-table-wrapper .dt-container {
-    width: 100%;
-
-    padding: 0;
-}
-
-.purchases-table-wrapper .dt-layout-row {
-    margin: 0 !important;
-    padding: 0;
-}
-
-.purchases-table-wrapper .dt-layout-cell {
-    padding: 0 !important;
-}
-
-.purchases-table-wrapper .dt-layout-table {
-    margin: 0 !important;
-}
-
-/* Somente o rodapé recebe espaçamento */
-.purchases-table-wrapper .dt-layout-row:last-child {
-    min-height: 64px;
-
-    display: flex;
-    align-items: center;
-    border-top: 1px solid #e2e8f0;
-}
-
-
-/* =========================
-   DataTables Info
-========================= */
-
-.purchases-table-wrapper .dt-info {
-    padding: 20px;
-
-    color: #718096;
-    font-size: 13px;
-}
-
-
-/* =========================
-   DataTables Pagination
-========================= */
-
-.purchases-table-wrapper .dt-paging {
-    display: flex;
-    align-items: center;
-    padding: 20px;
-    gap: 6px;
-}
-
-.purchases-table-wrapper .dt-paging .dt-paging-button {
-    min-width: 36px;
-    height: 36px;
-
-    margin: 0;
-    padding: 0 10px;
-
-    color: #4a5568 !important;
-    font-size: 13px;
-
-    background: #ffffff !important;
-
-    border: 1px solid #e2e8f0 !important;
-    border-radius: 6px !important;
-
-    cursor: pointer;
-}
-
-.purchases-table-wrapper .dt-paging .dt-paging-button:hover {
-    color: #1a202c !important;
-
-    background: #f8fafc !important;
-
-    border-color: #cbd5e0 !important;
-}
-
-.purchases-table-wrapper .dt-paging .dt-paging-button.current {
-    color: #ffffff !important;
-
-    background: #14a58c !important;
-
-    border-color: #14a58c !important;
-}
-
-.purchases-table-wrapper .dt-paging .dt-paging-button.current:hover {
-    color: #ffffff !important;
-
-    background: #14a58c !important;
-
-    border-color: #14a58c !important;
-}
-
-.purchases-table-wrapper .dt-paging .dt-paging-button.disabled {
-    opacity: 0.45;
-
-    cursor: default;
-}
-
-
-/* =========================
-   Clear Filters
-========================= */
-
-.purchases-clear-filters {
-    height: 44px;
-
-    padding: 0 16px;
-
-    color: #c53030;
-    font: inherit;
-    font-size: 14px;
-    font-weight: 500;
-
-    background-color: #fff5f5;
-
-    border: 1px solid #fed7d7;
-    border-radius: 7px;
-
-    display: flex;
-    align-items: center;
-    gap: 6px;
-
-    cursor: pointer;
-}
-
-.purchases-clear-filters:hover {
-    color: #9b2c2c;
-    background-color: #fed7d7;
-}
-
-.purchases-clear-filters svg {
-    width: 16px;
-    height: 16px;
-}
-
-
-/* =========================
-   Purchase Form
-========================= */
+   PURCHASE FORM
+   ========================= */
 
 #purchase-form .form-grid {
     grid-template-columns: repeat(3, 1fr);
@@ -379,13 +10,23 @@
     display: none;
 }
 
+
 /* =========================
-   Transactions
-========================= */
+   TRANSACTIONS
+   ========================= */
 
 .transactions-section {
     margin-top: 24px;
 }
+
+.transactions-section.hidden {
+    display: none;
+}
+
+
+/* =========================
+   INSTALLMENT GROUP
+   ========================= */
 
 .installment-group {
     padding: 16px 0;
@@ -393,13 +34,39 @@
     border-bottom: 1px solid #e2e8f0;
 }
 
-.installment-group h4 {
-    margin: 0 0 12px;
+
+/* =========================
+   INSTALLMENT HEADER
+   ========================= */
+
+.installment-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 12px;
+}
+
+.installment-header h4 {
+    margin: 0;
 
     color: #4a5568;
+
     font-size: 14px;
     font-weight: 600;
 }
+
+.installment-total {
+    color: var(--primary);
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+
+/* =========================
+   TRANSACTION ROWS
+   ========================= */
 
 .transaction-rows {
     display: flex;
@@ -416,10 +83,14 @@
     gap: 16px;
 }
 
-/* A primeira linha não possui lixeira */
 .transaction-row:first-child {
     grid-template-columns: 2fr 1fr;
 }
+
+
+/* =========================
+   TRANSACTION REMOVE
+   ========================= */
 
 .transaction-remove {
     width: 44px;
@@ -443,6 +114,11 @@
     height: 17px;
 }
 
+
+/* =========================
+   ADD PERSON
+   ========================= */
+
 .add-person-transaction-button {
     height: 34px;
 
@@ -454,6 +130,7 @@
     padding: 0 12px;
 
     color: var(--primary);
+
     font-size: 13px;
     font-weight: 600;
 
@@ -477,40 +154,8 @@
 
 
 /* =========================
-   Transactions Visibility
-========================= */
-
-.transactions-section.hidden {
-    display: none;
-}
-
-
-/* =========================
-   Installment Header
-========================= */
-
-.installment-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    margin-bottom: 12px;
-}
-
-.installment-header h4 {
-    margin: 0;
-}
-
-.installment-total {
-    color: var(--primary);
-    font-size: 14px;
-    font-weight: 600;
-}
-
-
-/* =========================
-   Installment Balance
-========================= */
+   INSTALLMENT BALANCE
+   ========================= */
 
 .installment-balance {
     margin-top: 10px;

@@ -194,30 +194,17 @@
 
 
 /* =========================
-   RECORDS / EMPTY STATE
+   EMPTY STATE
    ========================= */
 
-.records-container {
+.empty-state {
     min-height: 420px;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    background: var(--surface);
-
-    border: 1px solid var(--border);
-    border-radius: 8px;
-}
-
-.empty-state {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 12px;
-
-    min-height: 420px;
 
     color: var(--muted-foreground);
 

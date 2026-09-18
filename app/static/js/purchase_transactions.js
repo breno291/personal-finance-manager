@@ -1,7 +1,5 @@
-// ================================================== LANÇAMENTOS ==================================================
-
 // ==================================================
-// ELEMENTOS - LANÇAMENTOS
+// TRANSACTION ELEMENTS
 // ==================================================
 
 const transactionsSection = document.getElementById("transactions-section");
@@ -10,7 +8,7 @@ const personOptionsTemplate = document.getElementById("person-options-template")
 
 
 // ==================================================
-// FUNÇÕES - VALORES DAS PARCELAS
+// INSTALLMENT VALUES
 // ==================================================
 
 function calculateInstallmentValues() {
@@ -21,14 +19,9 @@ function calculateInstallmentValues() {
     const installmentValues = [];
 
     for (let index = 0; index < installmentCount; index++) {
-        let installmentValue =
-            baseValue;
+        const extraCent = index < remainder ? 1 : 0;
 
-        if (index < remainder) {
-            installmentValue += 1;
-        }
-
-        installmentValues.push(installmentValue);
+        installmentValues.push(baseValue + extraCent);
     }
 
     return installmentValues;
@@ -36,7 +29,7 @@ function calculateInstallmentValues() {
 
 
 // ==================================================
-// FUNÇÕES - VENCIMENTO
+// DUE DATE
 // ==================================================
 
 function paymentMethodHasDueDate() {
@@ -52,23 +45,19 @@ function paymentMethodHasDueDate() {
     );
 }
 
-
 function calculateCardFirstDueDate() {
     const selectedOption = purchasePaymentMethod.selectedOptions[0];
     const closingDay = Number(selectedOption.dataset.closingDay);
-    const dueDay =Number(selectedOption.dataset.dueDay);
-
+    const dueDay = Number(selectedOption.dataset.dueDay);
     const [purchaseYear, purchaseMonth, purchaseDay] = purchaseDate.value.split("-").map(Number);
     const monthsUntilDue = purchaseDay >= closingDay ? 2 : 1;
     const targetMonthIndex = purchaseMonth - 1 + monthsUntilDue;
-
     const targetYear = purchaseYear + Math.floor(targetMonthIndex / 12);
     const targetMonth = ((targetMonthIndex % 12) + 12) % 12 + 1;
     const targetDay = getValidDayForMonth(targetYear, targetMonth, dueDay);
 
     return formatDateValue(targetYear, targetMonth, targetDay);
 }
-
 
 function updateDueDateField() {
     if (!purchasePaymentMethod.value) {
@@ -90,7 +79,6 @@ function updateDueDateField() {
     firstDueDate.required = true;
 }
 
-
 function getFirstDueDate() {
     if (!purchasePaymentMethod.value) {
         return "";
@@ -109,30 +97,31 @@ function getFirstDueDate() {
 
 
 // ==================================================
-// FUNÇÕES - VISIBILIDADE
+// TRANSACTION VISIBILITY
 // ==================================================
 
 function updateTransactionsVisibility() {
-    if (!isPurchaseDataComplete()) {
-        transactionsSection.classList.add("hidden");
-
-        return;
-    }
-
+    const purchaseComplete = isPurchaseDataComplete();
     const dueDate = getFirstDueDate();
 
-    if (!dueDate) {
-        transactionsSection.classList.add("hidden");
+    const shouldShow = purchaseComplete && dueDate !== "";
 
-        return;
-    }
-
-    transactionsSection.classList.remove("hidden");
+    transactionsSection.classList.toggle("hidden", !shouldShow);
 }
 
 
 // ==================================================
-// FUNÇÕES - GRUPOS DE PARCELAS
+// TRANSACTION RESET
+// ==================================================
+
+function resetPurchaseTransactions() {
+    transactionsSection.classList.add("hidden");
+    installmentGroups.innerHTML = "";
+}
+
+
+// ==================================================
+// INSTALLMENT GROUPS
 // ==================================================
 
 function updateInstallmentGroups() {
@@ -144,9 +133,9 @@ function updateInstallmentGroups() {
         return;
     }
 
-    const firstInstallmentDueDate = getFirstDueDate();
+    const firstDueDate = getFirstDueDate();
 
-    if (!firstInstallmentDueDate) {
+    if (!firstDueDate) {
         installmentGroups.innerHTML = "";
         return;
     }
@@ -155,96 +144,24 @@ function updateInstallmentGroups() {
 
     installmentGroups.innerHTML = "";
 
-    installmentValues.forEach(
-        function (installmentValue, index) {
-            const installmentNumber = index + 1;
-            const dueDate = addMonthsToDate(firstInstallmentDueDate, index);
-            const group = createInstallmentGroup(installmentNumber, installmentValue, dueDate);
+    installmentValues.forEach(function (value, index) {
+        const installmentNumber = index + 1;
+        const dueDate = addMonthsToDate(firstDueDate, index);
+        const group = createInstallmentGroup(installmentNumber, value, dueDate);
 
-            installmentGroups.appendChild(group);
-        }
-    );
+        addTransactionRow(group, {value: value, removable: false});
+
+        installmentGroups.appendChild(group);
+    });
 
     lucide.createIcons();
 }
-
 
 function createInstallmentGroup(installmentNumber, installmentValue, dueDate) {
     const group = document.createElement("div");
 
     group.classList.add("installment-group");
-    group.dataset.installment =installmentNumber;
-    group.dataset.value =installmentValue;
-    group.dataset.dueDate =dueDate;
 
-    group.innerHTML = `
-        <div class="installment-header">
-            <h4>Parcela ${installmentNumber} - vencimento: ${formatDateDisplay(dueDate)}</h4>
-            <span class="installment-total">${formatCurrency(installmentValue)}</span>
-        </div>
-
-        <div class="transaction-rows"></div>
-        <button class="add-person-transaction-button" type="button"><i data-lucide="plus"></i>Adicionar pessoa</button>
-        <div class="installment-balance"></div>
-    `;
-
-    const rows = group.querySelector(".transaction-rows");
-    rows.appendChild(createTransactionRow(installmentNumber, false, installmentValue, dueDate));
-
-    const addPersonButton = group.querySelector(".add-person-transaction-button");
-
-    addPersonButton.addEventListener("click", function () {
-        rows.appendChild(createTransactionRow(installmentNumber,true,0,dueDate));
-
-        updatePersonOptions(group);
-        updateInstallmentBalance(group);
-
-        lucide.createIcons();
-    });
-
-    updateInstallmentBalance(group);
-
-    return group;
-}
-
-
-// ==================================================
-// FUNÇÕES - CARREGAR LANÇAMENTOS
-// ==================================================
-
-function loadExistingTransactions(transactions) {
-    installmentGroups.innerHTML = "";
-
-    const transactionsByInstallment = {};
-
-    transactions.forEach(function (transaction) {
-        if (!transactionsByInstallment[transaction.installment]) {
-            transactionsByInstallment[transaction.installment] = [];
-        }
-
-        transactionsByInstallment[transaction.installment].push(transaction);
-    });
-
-    Object.entries(transactionsByInstallment).forEach(
-        function ([installmentNumber, installmentTransactions]) {
-            const installmentValue = installmentTransactions.reduce(function (total, transaction) { return total + transaction.value; }, 0);
-            const dueDate = installmentTransactions[0].due_date;
-            const group = createExistingInstallmentGroup(Number(installmentNumber), installmentValue, dueDate, installmentTransactions);
-
-            installmentGroups.appendChild(group);
-        }
-    );
-
-    transactionsSection.classList.remove("hidden");
-
-    lucide.createIcons();
-}
-
-
-function createExistingInstallmentGroup(installmentNumber, installmentValue, dueDate, transactions) {
-    const group = document.createElement("div");
-
-    group.classList.add("installment-group");
     group.dataset.installment = installmentNumber;
     group.dataset.value = installmentValue;
     group.dataset.dueDate = dueDate;
@@ -270,46 +187,109 @@ function createExistingInstallmentGroup(installmentNumber, installmentValue, due
         <div class="installment-balance"></div>
     `;
 
-    const rows = group.querySelector(".transaction-rows");
-
-    transactions.forEach(function (transaction, index) {
-        const row = createTransactionRow(installmentNumber, index > 0, transaction.value, dueDate);
-
-        row.querySelector('input[name="transaction_id"]').value = transaction.id;
-        row.querySelector(".transaction-person").value =transaction.person_id;
-        rows.appendChild(row);
-    });
-
     const addPersonButton = group.querySelector(".add-person-transaction-button");
 
     addPersonButton.addEventListener("click", function () {
-        rows.appendChild(createTransactionRow(installmentNumber, true, 0, dueDate));
-
-        updatePersonOptions(group);
-        updateInstallmentBalance(group);
-
+        addTransactionRow(group, {value: 0, removable: true});
         lucide.createIcons();
     });
-
-    updatePersonOptions(group);
-    updateInstallmentBalance(group);
 
     return group;
 }
 
 
 // ==================================================
-// FUNÇÕES - LANÇAMENTO
+// EXISTING TRANSACTIONS
 // ==================================================
 
-function createTransactionRow(installmentNumber, removable, initialValue, dueDate) {
+function loadExistingTransactions(transactions) {
+    resetPurchaseTransactions();
+
+    const transactionsByInstallment = groupTransactionsByInstallment(transactions);
+
+    Object.entries(transactionsByInstallment).forEach(
+        function ([installmentNumber, transactions]) {
+            const installmentValue = calculateTransactionsTotal(transactions);
+
+            const dueDate = transactions[0].due_date;
+
+            const group = createInstallmentGroup(Number(installmentNumber), installmentValue, dueDate);
+
+            transactions.forEach(function (transaction, index) {
+                addTransactionRow(group, {
+                        transactionId: transaction.id,
+                        personId: transaction.person_id,
+                        value: transaction.value,
+                        removable: index > 0
+                    }
+                );
+            });
+
+            installmentGroups.appendChild(group);
+        }
+    );
+
+    transactionsSection.classList.remove("hidden");
+
+    lucide.createIcons();
+}
+
+function groupTransactionsByInstallment(transactions) {
+    const groupedTransactions = {};
+
+    transactions.forEach(function (transaction) {
+        const installmentNumber = transaction.installment;
+
+        if (!groupedTransactions[installmentNumber]) {
+            groupedTransactions[installmentNumber] = [];
+        }
+
+        groupedTransactions[installmentNumber].push(transaction);
+    });
+
+    return groupedTransactions;
+}
+
+function calculateTransactionsTotal(transactions) {
+    return transactions.reduce(
+        function (total, transaction) {
+            return total + transaction.value;
+        },
+        0
+    );
+}
+
+
+// ==================================================
+// TRANSACTION ROWS
+// ==================================================
+
+function addTransactionRow(group, {transactionId = "", personId = "", value = 0, removable = false}) {
+    const installmentNumber = group.dataset.installment;
+    const dueDate = group.dataset.dueDate;
+    const row = createTransactionRow(installmentNumber, dueDate, removable);
+
+    row.querySelector('input[name="transaction_id"]').value = transactionId;
+    row.querySelector(".transaction-person").value = personId;
+
+    const amountInput = row.querySelector(".transaction-amount");
+    amountInput.value = value > 0 ? formatCurrency(value) : "";
+
+    const rows = group.querySelector(".transaction-rows");
+    rows.appendChild(row);
+
+    updatePersonOptions(group);
+    updateInstallmentBalance(group);
+}
+
+function createTransactionRow(installmentNumber, dueDate, removable) {
     const row = document.createElement("div");
 
     row.classList.add("transaction-row");
 
     row.innerHTML = `
         <input type="hidden" name="installment_number" value="${installmentNumber}">
-		<input type="hidden" name="transaction_id" value="">
+        <input type="hidden" name="transaction_id" value="">
         <input type="hidden" name="due_date" value="${dueDate}">
 
         <div class="form-field">
@@ -321,29 +301,33 @@ function createTransactionRow(installmentNumber, removable, initialValue, dueDat
 
         <div class="form-field">
             <label>Valor</label>
-            <input type="text" name="amount" class="transaction-amount" 
-                value="${initialValue > 0 ? formatCurrency(initialValue) : ""}"
-                placeholder="R$ 0,00" inputmode="numeric" required
-            >
+            <input type="text" name="amount" class="transaction-amount" placeholder="R$ 0,00" inputmode="numeric" required>
         </div>
 
         ${removable ? `
-                    <button class="transaction-remove" type="button" aria-label="Remover pessoa">
-                        <i data-lucide="trash-2"></i>
-                    </button>
-                ` : ""}
+            <button class="transaction-remove" type="button" aria-label="Remover pessoa">
+                <i data-lucide="trash-2"></i>
+            </button>
+        ` : ""}
     `;
 
-    const person = row.querySelector(".transaction-person");
+    bindTransactionRowEvents(row, removable);
 
-    const amount = row.querySelector(".transaction-amount");
+    return row;
+}
 
-    person.addEventListener("change", function () {
+function bindTransactionRowEvents(row, removable) {
+    const personSelect = row.querySelector(".transaction-person");
+
+    const amountInput = row.querySelector(".transaction-amount");
+
+    personSelect.addEventListener("change", function () {
         const group = row.closest(".installment-group");
+
         updatePersonOptions(group);
     });
 
-    amount.addEventListener("input", function () {
+    amountInput.addEventListener("input", function () {
         formatCurrencyInput(this);
 
         const group = row.closest(".installment-group");
@@ -351,29 +335,37 @@ function createTransactionRow(installmentNumber, removable, initialValue, dueDat
         updateInstallmentBalance(group);
     });
 
-    if (removable) {
-        const removeButton = row.querySelector(".transaction-remove");
-        removeButton.addEventListener("click", function () {
-            const group = row.closest(".installment-group");
-
-            row.remove();
-
-            updatePersonOptions(group);
-            updateInstallmentBalance(group);
-        });
+    if (!removable) {
+        return;
     }
 
-    return row;
+    const removeButton = row.querySelector(".transaction-remove");
+
+    removeButton.addEventListener("click", function () {
+        const group = row.closest(".installment-group");
+
+        row.remove();
+
+        updatePersonOptions(group);
+        updateInstallmentBalance(group);
+    });
 }
 
 
 // ==================================================
-// FUNÇÕES - PESSOAS
+// PERSON OPTIONS
 // ==================================================
 
 function updatePersonOptions(group) {
     const selects = group.querySelectorAll(".transaction-person");
-    const selectedPeople = Array.from(selects).map(select => select.value).filter(value => value !== "");
+
+    const selectedPeople = Array.from(selects)
+        .map(function (select) {
+            return select.value;
+        })
+        .filter(function (value) {
+            return value !== "";
+        });
 
     selects.forEach(function (select) {
         const currentValue = select.value;
@@ -390,7 +382,7 @@ function updatePersonOptions(group) {
 
 
 // ==================================================
-// FUNÇÕES - SALDO
+// INSTALLMENT BALANCE
 // ==================================================
 
 function updateInstallmentBalance(group) {
@@ -416,18 +408,18 @@ function updateInstallmentBalance(group) {
 
     if (difference < 0) {
         balance.classList.add("exceeded");
-        balance.textContent =`Excedeu: ${formatCurrency(Math.abs(difference))}`;
+        balance.textContent = `Excedeu: ${formatCurrency(Math.abs(difference))}`;
 
         return;
     }
 
     balance.classList.add("complete");
-    balance.textContent ="Distribuído corretamente ✓";
+    balance.textContent = "Distribuído corretamente ✓";
 }
 
 
 // ==================================================
-// VALIDAÇÕES - LANÇAMENTOS
+// TRANSACTION VALIDATION
 // ==================================================
 
 function areTransactionsValid() {
@@ -446,7 +438,7 @@ function areTransactionsValid() {
             const person = row.querySelector(".transaction-person").value;
             const amount = getCurrencyValueInCents(row.querySelector(".transaction-amount"));
 
-            if ( person === "" || amount <= 0) {
+            if (person === "" || amount <= 0) {
                 return false;
             }
 
@@ -460,4 +452,3 @@ function areTransactionsValid() {
 
     return true;
 }
-

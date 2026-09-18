@@ -4,6 +4,7 @@
 
 {% block styles %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/pages.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/cards.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/modal.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/payment_methods.css') }}">
 {% endblock %}
@@ -34,12 +35,12 @@
 </div>
 
 
-<div class="payment-methods-content">
+<div class="cards-content">
     {% if payment_methods %}
-        <div class="payment-methods-grid">
+        <div class="cards-grid">
             {% for payment_method in payment_methods %}
                 <div
-                    class="payment-method-card"
+                    class="card payment-method-card"
                     data-payment-method-id="{{ payment_method.id }}"
                     data-payment-method-description="{{ payment_method.description }}"
                     data-payment-method-type="{{ payment_method.payment_type }}"
@@ -54,12 +55,10 @@
                         {% endif %}
                     </div>
 
-                    <div class="payment-method-info">
-                        <div class="payment-method-name-row">
+                    <div class="card-info">
+                        <div class="card-title-row">
                             <h3>{{ payment_method.description }}</h3>
-                            <span class="status-badge active-status">
-                                <span class="status-dot"></span>Ativa
-                            </span>
+                            <span class="status-badge active-status"><span class="status-dot"></span>Ativa</span>
                         </div>
 
                         <div class="payment-method-details">
@@ -76,23 +75,17 @@
 
                             <div class="payment-method-detail">
                                 <i data-lucide="calendar-clock"></i>
-                                <span>
-                                    Fechamento:
-                                    {{ payment_method.closing_day or "—" }}
-                                </span>
+                                <span>Fechamento: {{ payment_method.closing_day or "—" }}</span>
                             </div>
 
                             <div class="payment-method-detail">
                                 <i data-lucide="calendar-check"></i>
-                                <span>
-                                    Vencimento:
-                                    {{ payment_method.due_day or "—" }}
-                                </span>
+                                <span>Vencimento: {{ payment_method.due_day or "—" }}</span>
                             </div>
                         </div>
                     </div>
 
-                    <i data-lucide="chevron-right" class="payment-method-card-arrow"></i>
+                    <i data-lucide="chevron-right" class="card-arrow"></i>
                 </div>
             {% endfor %}
         </div>
@@ -124,8 +117,12 @@
         </div>
     {% endif %}
 </div>
+
 {% include "components/payment_method_modal.html" %}
 {% include "components/confirmation_modal.html" %}
+{% endblock %}
 
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/confirmation_modal.js') }}"></script>
 <script src="{{ url_for('static', filename='js/payment_methods.js') }}"></script>
 {% endblock %}
