@@ -4,6 +4,7 @@
 
 {% block styles %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/pages.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/tables.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/modal.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/purchases.css') }}">
 <link rel="stylesheet" href="https://cdn.datatables.net/3.0.3/css/dataTables.dataTables.css">
@@ -21,34 +22,33 @@
     </button>
 </div>
 
-<div class="purchases-toolbar">
-
-    <div class="purchases-search">
+<div class="table-toolbar">
+    <div class="table-search">
         <i data-lucide="search"></i>
         <input type="search" id="purchases-search" placeholder="Buscar compras...">
     </div>
 
-    <div class="purchases-filter-group">
+    <div class="table-filter-group">
         <label for="payment-method-filter">Forma de pagamento</label>
-
-        <select id="payment-method-filter" class="purchases-filter">
+        <select id="payment-method-filter" class="table-filter">
             <option value="">Todas as formas</option>
         </select>
     </div>
 
-    <div class="purchases-filter-group">
+    <div class="table-filter-group">
         <label for="purchase-month-filter">Mês da compra</label>
-        <select id="purchase-month-filter" class="purchases-filter">
+        <select id="purchase-month-filter" class="table-filter">
             <option value="">Todos os meses</option>
         </select>
     </div>
 
-    <button type="button" id="clear-filters" class="purchases-clear-filters">
+    <button type="button" id="clear-filters" class="table-clear-filters">
         <i data-lucide="x"></i>Limpar filtros
     </button>
 </div>
-<div class="purchases-table-wrapper">
-    <table class="purchases-table" id="purchases-table">
+
+<div class="table-wrapper">
+    <table class="data-table" id="purchases-table">
         <thead>
             <tr>
                 <th>Data</th>
@@ -80,9 +80,15 @@
         </tbody>
     </table>
 </div>
+
 {% include "components/purchase_modal.html" %}
 {% include "components/confirmation_modal.html" %}
+{% endblock %}
+
+{% block scripts %}
 <script src="https://cdn.datatables.net/3.0.3/js/dataTables.js"></script>
-<script src="{{ url_for('static', filename='js/transactions.js') }}"></script>
+<script src="{{ url_for('static', filename='js/confirmation_modal.js') }}"></script>
+<script src="{{ url_for('static', filename='js/purchase_transactions.js') }}"></script>
 <script src="{{ url_for('static', filename='js/purchases.js') }}"></script>
+<script src="{{ url_for('static', filename='js/purchase_table.js') }}"></script>
 {% endblock %}

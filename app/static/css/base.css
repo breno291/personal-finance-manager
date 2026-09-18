@@ -1,3 +1,7 @@
+/* =========================
+   GLOBAL
+   ========================= */
+
 :root {
     --background: #f5f7fa;
     --surface: #ffffff;
@@ -24,11 +28,13 @@
 html,
 body {
     margin: 0;
+
     min-height: 100%;
 }
 
 body {
     font-family: "Geist", sans-serif;
+
     background: var(--background);
     color: var(--foreground);
 }
@@ -47,6 +53,7 @@ textarea {
 
 .app {
     display: flex;
+
     min-height: 100vh;
 }
 
@@ -77,11 +84,11 @@ textarea {
 }
 
 .brand {
+    height: 42px;
+
     display: flex;
     align-items: center;
     gap: 14px;
-
-    height: 42px;
 
     padding: 0 12px;
     margin-bottom: 40px;
@@ -137,9 +144,10 @@ textarea {
     border-radius: 7px;
 
     color: #ffffff;
-    text-decoration: none;
 
     font-size: 15px;
+
+    text-decoration: none;
     white-space: nowrap;
 
     transition:
@@ -170,11 +178,11 @@ textarea {
 }
 
 .sidebar-footer {
-    margin-top: auto;
-
     display: flex;
     flex-direction: column;
     gap: 4px;
+
+    margin-top: auto;
 }
 
 
@@ -208,6 +216,7 @@ textarea {
     padding: 0 32px;
 
     background: var(--surface);
+
     border-bottom: 1px solid var(--border);
 }
 
@@ -220,8 +229,8 @@ textarea {
     padding: 0;
 
     border: 0;
-    background: transparent;
 
+    background: transparent;
     color: var(--foreground);
 
     cursor: pointer;
@@ -311,11 +320,13 @@ textarea {
 
 .app.sidebar-collapsed .page {
     width: calc(100% - var(--sidebar-collapsed-width));
+
     margin-left: var(--sidebar-collapsed-width);
 }
 
 .app.sidebar-collapsed .brand {
     justify-content: center;
+
     padding: 0;
 }
 
@@ -325,11 +336,10 @@ textarea {
 
 .app.sidebar-collapsed .nav-item {
     justify-content: center;
+    gap: 0;
 
     padding-left: 0;
     padding-right: 0;
-
-    gap: 0;
 }
 
 .app.sidebar-collapsed .nav-text {

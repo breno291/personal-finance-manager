@@ -1,14 +1,12 @@
-// ================================================== BASE ==================================================
-
 // ==================================================
-// INICIALIZAÇÃO
+// INITIALIZATION
 // ==================================================
 
 lucide.createIcons();
 
 
 // ==================================================
-// ELEMENTOS - SIDEBAR
+// SIDEBAR ELEMENTS
 // ==================================================
 
 const app = document.querySelector(".app");
@@ -17,7 +15,7 @@ const menuIcon = document.querySelector("#menu-icon");
 
 
 // ==================================================
-// EVENTOS - SIDEBAR
+// SIDEBAR EVENTS
 // ==================================================
 
 menuButton.addEventListener("click", function () {
@@ -31,11 +29,8 @@ menuButton.addEventListener("click", function () {
 });
 
 
-
-// ================================================== UTILITÁRIOS ==================================================
-
 // ==================================================
-// FUNÇÕES - MOEDA
+// CURRENCY UTILITIES
 // ==================================================
 
 function formatCurrencyInput(input) {
@@ -49,11 +44,12 @@ function formatCurrencyInput(input) {
     input.value = formatCurrency(Number(value));
 }
 
-
 function formatCurrency(valueInCents) {
-    return (valueInCents / 100).toLocaleString("pt-BR",{style: "currency", currency: "BRL"});
+    return (valueInCents / 100).toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL"
+    });
 }
-
 
 function getCurrencyValueInCents(input) {
     const value = input.value.replace(/\D/g, "");
@@ -63,13 +59,16 @@ function getCurrencyValueInCents(input) {
 
 
 // ==================================================
-// FUNÇÕES - DATAS
+// DATE UTILITIES
 // ==================================================
 
 function formatDateValue(year, month, day) {
-    return [year,String(month).padStart(2, "0"),String(day).padStart(2, "0")].join("-");
+    return [
+        year,
+        String(month).padStart(2, "0"),
+        String(day).padStart(2, "0")
+    ].join("-");
 }
-
 
 function formatDateDisplay(dateValue) {
     const [year, month, day] = dateValue.split("-");
@@ -77,16 +76,15 @@ function formatDateDisplay(dateValue) {
     return `${day}/${month}/${year}`;
 }
 
-
 function getValidDayForMonth(year, month, day) {
     const lastDay = new Date(year, month, 0).getDate();
 
-    return Math.min(day,lastDay);
+    return Math.min(day, lastDay);
 }
-
 
 function addMonthsToDate(dateValue, monthsToAdd) {
     const [year, month, day] = dateValue.split("-").map(Number);
+
     const targetMonthIndex = month - 1 + monthsToAdd;
     const targetYear = year + Math.floor(targetMonthIndex / 12);
     const targetMonth = ((targetMonthIndex % 12) + 12) % 12 + 1;
@@ -94,5 +92,3 @@ function addMonthsToDate(dateValue, monthsToAdd) {
 
     return formatDateValue(targetYear, targetMonth, targetDay);
 }
-
-

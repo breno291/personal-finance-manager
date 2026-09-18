@@ -1,53 +1,4 @@
 /* =========================
-   PEOPLE CONTENT
-   ========================= */
-
-.people-content {
-    min-height: 420px;
-}
-
-.people-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 20px;
-}
-
-
-/* =========================
-   PERSON CARD
-   ========================= */
-
-.person-card {
-    min-height: 138px;
-
-    display: flex;
-    align-items: center;
-
-    padding: 24px;
-
-    background: var(--surface);
-
-    border: 1px solid var(--border);
-    border-radius: 9px;
-
-    cursor: pointer;
-
-    transition:
-        border-color 0.15s ease,
-        box-shadow 0.15s ease,
-        transform 0.15s ease;
-}
-
-.person-card:hover {
-    border-color: #c5d0dc;
-
-    box-shadow: 0 6px 18px rgba(15, 23, 42, 0.07);
-
-    transform: translateY(-2px);
-}
-
-
-/* =========================
    AVATAR
    ========================= */
 
@@ -96,34 +47,8 @@
 
 
 /* =========================
-   PERSON INFO
+   PERSON CONTACT
    ========================= */
-
-.person-info {
-    min-width: 0;
-
-    flex: 1;
-}
-
-.person-name-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-
-    margin-bottom: 12px;
-}
-
-.person-name-row h3 {
-    margin: 0;
-
-    overflow: hidden;
-
-    font-size: 16px;
-    font-weight: 650;
-
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
 
 .person-contact {
     display: flex;
@@ -149,41 +74,4 @@
 
     text-overflow: ellipsis;
     white-space: nowrap;
-}
-
-
-/* =========================
-   CARD ARROW
-   ========================= */
-
-.person-card-arrow {
-    width: 20px;
-    height: 20px;
-
-    flex-shrink: 0;
-
-    margin-left: 18px;
-
-    color: #a0aec0;
-
-    transition:
-        color 0.15s ease,
-        transform 0.15s ease;
-}
-
-.person-card:hover .person-card-arrow {
-    color: var(--primary);
-
-    transform: translateX(2px);
-}
-
-
-/* =========================
-   RESPONSIVE
-   ========================= */
-
-@media (max-width: 900px) {
-    .people-grid {
-        grid-template-columns: 1fr;
-    }
 }

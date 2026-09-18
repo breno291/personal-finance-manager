@@ -1,62 +1,106 @@
-# Contribuindo
+# Contributing
 
-Este documento define o fluxo de trabalho utilizado no desenvolvimento do projeto.
+Este documento define o fluxo de desenvolvimento do **Personal Finance Manager**.
 
-## 1. Escolhendo uma tarefa
+## Fluxo de trabalho
 
-- Escolha uma issue com status `Ready`.
-- Priorize as tarefas na ordem: `P0` → `P1` → `P2`.
-- Verifique se a tarefa não depende de outra que ainda esteja em desenvolvimento.
-- Atribua a issue a você.
-- Mova a issue para `In Progress`.
+### 1. Escolha uma issue
 
-## 2. Iniciando o desenvolvimento
+Antes de começar, escolha uma issue disponível no projeto e mova para o status correspondente ao início do desenvolvimento.
 
-- Atualize sua branch `main`.
-- Crie uma nova branch a partir da `main`.
-- Utilize um dos seguintes padrões:
+Evite trabalhar em uma tarefa que já esteja sendo desenvolvida por outra pessoa.
 
-```text
-feature/nome-da-feature
-fix/nome-da-correcao
-refactor/nome-da-refatoracao
+### 2. Atualize a `main`
+
+```bash
+git checkout main
+git pull
 ```
 
-## 3. Durante o desenvolvimento
+### 3. Crie uma branch
 
-- Mantenha as alterações dentro do escopo da issue.
-- Faça commits pequenos e coerentes.
-- Escreva as mensagens de commit em inglês.
-- Mantenha os testes existentes passando.
-- Adicione testes para novas regras de negócio, validações e alterações no banco quando necessário.
+Crie uma branch a partir da `main` atualizada.
 
-## 4. Finalizando uma tarefa
+Exemplos:
 
-Antes de abrir o Pull Request:
+```bash
+git checkout -b feature/add-transactions-page
+git checkout -b fix/purchase-edit
+git checkout -b refactor/purchase-modal
+```
 
-- Execute os testes.
-- Faça uma verificação manual da funcionalidade quando necessário.
-- Faça o push da branch para o GitHub.
-- Abra um Pull Request para a `main`.
-- Vincule a issue correspondente ao Pull Request.
-- Mova a issue para `In Review`.
-- Solicite a revisão do outro desenvolvedor.
+Use nomes curtos e descritivos.
 
-## 5. Code Review
+### 4. Desenvolva
 
-- O Pull Request deve ser revisado pelo desenvolvedor que não realizou a implementação.
-- Verifique se a implementação atende aos critérios de aceite da issue.
-- Verifique se não existem alterações desnecessárias fora do escopo.
-- Verifique se os testes estão passando.
-- Caso sejam necessárias alterações, o autor deve realizá-las na mesma branch e atualizar o Pull Request.
-- Quando estiver tudo correto, o Pull Request pode ser aprovado.
+Faça alterações relacionadas somente à issue escolhida.
 
-## 6. Merge
+Quando houver regra de negócio, validação ou operação de banco, priorize TDD:
 
-Após a aprovação:
+```text
+Teste → Implementação → Refatoração
+```
 
-- Faça o merge do Pull Request na `main`.
-- Exclua a branch utilizada.
-- Mova a issue para `Done`.
+Antes de finalizar, execute:
 
-Depois disso, o desenvolvedor pode escolher uma nova tarefa com status `Ready` e repetir o fluxo.
+```bash
+pytest
+```
+
+Também valide manualmente as telas afetadas quando necessário.
+
+### 5. Faça o commit
+
+Use mensagens de commit em inglês, curtas e descritivas.
+
+Exemplos:
+
+```bash
+git commit -m "Add: transaction validation"
+git commit -m "Fix: purchase date formatting"
+git commit -m "Refactor: purchase modal scripts"
+```
+
+### 6. Envie a branch
+
+```bash
+git push -u origin nome-da-branch
+```
+
+### 7. Abra um Pull Request
+
+Abra um Pull Request da sua branch para `main`.
+
+O PR deve explicar de forma breve:
+
+* o que foi alterado;
+* como validar;
+* qual issue está relacionada.
+
+### 8. Revisão
+
+Sempre que possível, outra pessoa deve revisar o Pull Request.
+
+Quem criou o PR não deve fazer o merge antes da revisão quando houver outro colaborador disponível.
+
+Se forem solicitadas alterações, faça os ajustes na mesma branch e envie novos commits.
+
+### 9. Merge
+
+Após aprovação e validação, faça o merge na `main`.
+
+Depois do merge:
+
+* exclua a branch;
+* confirme que a issue foi concluída;
+* atualize o status da tarefa no projeto.
+
+## Princípios
+
+* Mantenha as alterações simples.
+* Evite mudanças fora do escopo da issue.
+* Não misture refatoração e correção de bugs sem necessidade.
+* Preserve código simples quando uma abstração não trouxer benefício real.
+* Faça pequenas entregas incrementais.
+
+> Feito é melhor que perfeito.

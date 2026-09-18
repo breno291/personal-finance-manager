@@ -1,0 +1,317 @@
+/* =========================
+   TABLE TOOLBAR
+   ========================= */
+
+.table-toolbar {
+    display: flex;
+    align-items: flex-end;
+
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+
+/* =========================
+   TABLE SEARCH
+   ========================= */
+
+.table-search {
+    display: flex;
+    position: relative;
+
+    gap: 8px;
+}
+
+.table-search svg {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+
+    width: 17px;
+    height: 17px;
+
+    color: #a0aec0;
+
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+
+.table-search input {
+    width: 264px;
+    height: 44px;
+
+    padding: 0 14px 0 40px;
+
+    color: #1a202c;
+    font: inherit;
+    font-size: 14px;
+
+    background-color: #ffffff;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 7px;
+
+    outline: none;
+}
+
+.table-search input::placeholder {
+    color: #a0aec0;
+}
+
+.table-search input:focus {
+    border-color: #14a58c;
+}
+
+
+/* =========================
+   TABLE FILTERS
+   ========================= */
+
+.table-filter-group {
+    display: flex;
+    flex-direction: column;
+
+    gap: 6px;
+}
+
+.table-filter-group label {
+    color: #718096;
+
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.table-filter {
+    min-width: 220px;
+    height: 44px;
+
+    padding: 0 36px 0 14px;
+
+    color: #1a202c;
+    font: inherit;
+    font-size: 14px;
+
+    background-color: #ffffff;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 7px;
+
+    outline: none;
+    cursor: pointer;
+}
+
+.table-filter:focus {
+    border-color: #14a58c;
+}
+
+
+/* =========================
+   CLEAR FILTERS
+   ========================= */
+
+.table-clear-filters {
+    height: 44px;
+
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    padding: 0 16px;
+
+    color: #c53030;
+
+    font: inherit;
+    font-size: 14px;
+    font-weight: 500;
+
+    background-color: #fff5f5;
+
+    border: 1px solid #fed7d7;
+    border-radius: 7px;
+
+    cursor: pointer;
+}
+
+.table-clear-filters:hover {
+    color: #9b2c2c;
+    background-color: #fed7d7;
+}
+
+.table-clear-filters svg {
+    width: 16px;
+    height: 16px;
+}
+
+
+/* =========================
+   TABLE WRAPPER
+   ========================= */
+
+.table-wrapper {
+    width: 100%;
+
+    overflow-x: auto;
+
+    background-color: #ffffff;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+}
+
+
+/* =========================
+   TABLE
+   ========================= */
+
+.data-table {
+    width: 100% !important;
+
+    margin: 0 !important;
+
+    border-collapse: collapse !important;
+
+    font-size: 14px;
+}
+
+.data-table thead {
+    background-color: #f8fafc;
+}
+
+.data-table th {
+    height: 44px;
+
+    padding: 0 16px !important;
+
+    color: #718096;
+
+    font-size: 12px;
+    font-weight: 600;
+    text-align: left;
+    text-transform: uppercase;
+    white-space: nowrap;
+
+    background-color: #f8fafc;
+
+    border-bottom: 1px solid #e2e8f0 !important;
+}
+
+.data-table td {
+    height: 46px;
+
+    padding: 0 16px !important;
+
+    color: #1a202c;
+
+    font-size: 14px;
+
+    border-bottom: 1px solid #edf2f7 !important;
+}
+
+.data-table tbody tr:hover {
+    background-color: #f8fafc;
+}
+
+.data-table tbody tr:last-child td {
+    border-bottom: none !important;
+}
+
+
+/* =========================
+   DATATABLES LAYOUT
+   ========================= */
+
+.table-wrapper .dt-container {
+    width: 100%;
+
+    padding: 0;
+}
+
+.table-wrapper .dt-layout-row {
+    margin: 0 !important;
+    padding: 0;
+}
+
+.table-wrapper .dt-layout-cell {
+    padding: 0 !important;
+}
+
+.table-wrapper .dt-layout-table {
+    margin: 0 !important;
+}
+
+.table-wrapper .dt-layout-row:last-child {
+    min-height: 64px;
+
+    display: flex;
+    align-items: center;
+
+    border-top: 1px solid #e2e8f0;
+}
+
+
+/* =========================
+   DATATABLES INFO
+   ========================= */
+
+.table-wrapper .dt-info {
+    padding: 20px;
+
+    color: #718096;
+
+    font-size: 13px;
+}
+
+
+/* =========================
+   DATATABLES PAGINATION
+   ========================= */
+
+.table-wrapper .dt-paging {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    padding: 20px;
+}
+
+.table-wrapper .dt-paging .dt-paging-button {
+    min-width: 36px;
+    height: 36px;
+
+    margin: 0;
+    padding: 0 10px;
+
+    color: #4a5568 !important;
+
+    font-size: 13px;
+
+    background: #ffffff !important;
+
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 6px !important;
+
+    cursor: pointer;
+}
+
+.table-wrapper .dt-paging .dt-paging-button:hover {
+    color: #1a202c !important;
+
+    background: #f8fafc !important;
+
+    border-color: #cbd5e0 !important;
+}
+
+.table-wrapper .dt-paging .dt-paging-button.current,
+.table-wrapper .dt-paging .dt-paging-button.current:hover {
+    color: #ffffff !important;
+
+    background: #14a58c !important;
+
+    border-color: #14a58c !important;
+}
+
+.table-wrapper .dt-paging .dt-paging-button.disabled {
+    opacity: 0.45;
+
+    cursor: default;
+}

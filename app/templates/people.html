@@ -4,6 +4,7 @@
 
 {% block styles %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/pages.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/cards.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/modal.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/people.css') }}">
 {% endblock %}
@@ -27,18 +28,16 @@
             <input class="search-input" type="search" name="search" value="{{ search or '' }}" placeholder="Buscar pessoas...">
         </div>
 
-        <button class="search-button" type="submit" aria-label="Buscar pessoas">
-            <i data-lucide="search"></i>
-        </button>
+        <button class="search-button" type="submit" aria-label="Buscar pessoas"><i data-lucide="search"></i></button>
     </form>
 </div>
 
 
-<div class="people-content">
+<div class="cards-content">
     {% if people %}
-        <div class="people-grid">
+        <div class="cards-grid">
             {% for person in people %}
-                <div class="person-card" data-person-id="{{person.id}}" data-person-name="{{person.name}}" data-person-email="{{person.email}}" data-person-phone="{{person.phone}}">
+                <div class="card person-card" data-person-id="{{ person.id }}" data-person-name="{{ person.name }}" data-person-email="{{ person.email }}" data-person-phone="{{ person.phone }}">
                     <div class="person-avatar avatar-color-{{ loop.index0 % 5 }}">
                         {% set names = person.name.split() %}
 
@@ -48,8 +47,9 @@
                             {{ names[-1][0] | upper }}
                         {% endif %}
                     </div>
-                    <div class="person-info">
-                        <div class="person-name-row">
+
+                    <div class="card-info">
+                        <div class="card-title-row">
                             <h3>{{ person.name }}</h3>
                             <span class="status-badge active-status"><span class="status-dot"></span>Ativa</span>
                         </div>
@@ -63,10 +63,11 @@
                         </div>
                     </div>
 
-                    <i data-lucide="chevron-right" class="person-card-arrow"></i>
+                    <i data-lucide="chevron-right" class="card-arrow"></i>
                 </div>
             {% endfor %}
         </div>
+
         <div class="pagination">
             <span class="pagination-info">
                 Mostrando {{ start + 1 }}–{{ end }} de {{ total_people }} pessoas
@@ -98,8 +99,9 @@
 
 {% include "components/person_modal.html" %}
 {% include "components/confirmation_modal.html" %}
-
-<script src="{{ url_for('static', filename='js/people.js') }}"></script>
 {% endblock %}
 
-
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/confirmation_modal.js') }}"></script>
+<script src="{{ url_for('static', filename='js/people.js') }}"></script>
+{% endblock %}

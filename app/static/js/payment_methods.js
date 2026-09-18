@@ -1,5 +1,5 @@
 // ==================================================
-// ELEMENTOS - FORMA DE PAGAMENTO
+// PAYMENT METHOD ELEMENTS
 // ==================================================
 
 const paymentMethodModal = document.getElementById("payment-method-modal");
@@ -21,17 +21,7 @@ const paymentMethodDueDay = document.getElementById("payment-method-due-day");
 
 
 // ==================================================
-// ELEMENTOS - CONFIRMAÇÃO
-// ==================================================
-
-const confirmationModal = document.getElementById("confirmation-modal");
-const confirmationModalForm = document.getElementById("modal-form");
-const confirmationNo = document.getElementById("confirmation-no");
-const confirmationYes = document.getElementById("confirmation-yes");
-
-
-// ==================================================
-// FUNÇÕES - FORMA DE PAGAMENTO
+// PAYMENT METHOD FUNCTIONS
 // ==================================================
 
 function openPaymentMethodModal() {
@@ -45,7 +35,7 @@ function openPaymentMethodModal() {
 
     paymentMethodForm.action = "/payment-methods";
 
-	updatePaymentDaysRequirement();
+    updatePaymentDaysRequirement();
 
     deletePaymentMethodButton.classList.remove("visible");
     paymentMethodModal.classList.add("open");
@@ -64,7 +54,7 @@ function updatePaymentDaysRequirement() {
 
 
 // ==================================================
-// EVENTOS - FORMA DE PAGAMENTO
+// PAYMENT METHOD EVENTS
 // ==================================================
 
 addPaymentMethodButton.addEventListener("click", openPaymentMethodModal);
@@ -87,7 +77,7 @@ paymentMethodCards.forEach(function (card) {
         paymentMethodClosingDay.value = card.dataset.paymentMethodClosingDay;
         paymentMethodDueDay.value = card.dataset.paymentMethodDueDay;
 
-		updatePaymentDaysRequirement();
+        updatePaymentDaysRequirement();
 
         paymentMethodForm.action = `/payment-methods/${paymentMethodId.value}/edit`;
 
@@ -96,28 +86,13 @@ paymentMethodCards.forEach(function (card) {
     });
 });
 
-
-// ==================================================
-// EVENTOS - CONFIRMAÇÃO
-// ==================================================
-
 deletePaymentMethodButton.addEventListener("click", function () {
-    confirmationModal.classList.add("open");
-});
-
-confirmationNo.addEventListener("click", function () {
-    confirmationModal.classList.remove("open");
-});
-
-confirmationYes.addEventListener("click", function () {
-    confirmationModalForm.action = `/payment-methods/${paymentMethodId.value}/remove`;
+    openConfirmationModal(`/payment-methods/${paymentMethodId.value}/remove`);
 });
 
 
 // ==================================================
-// EVENTOS - TIPO DE PAGAMENTO
+// PAYMENT TYPE EVENTS
 // ==================================================
 
-paymentMethodType.addEventListener("change", function () {
-    updatePaymentDaysRequirement();
-});
+paymentMethodType.addEventListener("change", updatePaymentDaysRequirement);
