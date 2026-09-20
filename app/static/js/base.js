@@ -22,8 +22,17 @@ menuButton.addEventListener("click", function () {
     app.classList.toggle("sidebar-collapsed");
 
     const collapsed = app.classList.contains("sidebar-collapsed");
-    menuIcon.setAttribute("data-lucide", collapsed ? "panel-left-open" : "panel-left-close");
-    menuButton.setAttribute("aria-label", collapsed ? "Abrir menu" : "Fechar menu");
+    const icon = document.querySelector("#menu-icon");
+
+    icon.setAttribute(
+        "data-lucide",
+        collapsed ? "panel-left-open" : "panel-left-close"
+    );
+
+    menuButton.setAttribute(
+        "aria-label",
+        collapsed ? "Abrir menu" : "Fechar menu"
+    );
 
     lucide.createIcons();
 });
