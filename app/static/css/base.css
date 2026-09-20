@@ -3,22 +3,22 @@
    ========================= */
 
 :root {
-    --background: #f5f7fa;
+    --background: #f6f8fb;
     --surface: #ffffff;
 
-    --sidebar: #1a2332;
-    --sidebar-active: #2d3e52;
+    --sidebar: #111827;
+    --sidebar-hover: #1f2937;
 
-    --primary: #16a085;
+    --primary: #2563eb;
+    --primary-light: #eff6ff;
 
-    --foreground: #1a202c;
-    --muted-foreground: #718096;
+    --foreground: #172033;
+    --muted-foreground: #6b7280;
 
-    --border: #e2e8f0;
+    --border: #e5e7eb;
 
-    --sidebar-width: 260px;
+    --sidebar-width: 250px;
     --sidebar-collapsed-width: 76px;
-    --topbar-height: 84px;
 }
 
 * {
@@ -28,7 +28,6 @@
 html,
 body {
     margin: 0;
-
     min-height: 100%;
 }
 
@@ -53,7 +52,6 @@ textarea {
 
 .app {
     display: flex;
-
     min-height: 100vh;
 }
 
@@ -64,8 +62,7 @@ textarea {
 
 .sidebar {
     position: fixed;
-    top: 0;
-    left: 0;
+    inset: 0 auto 0 0;
 
     width: var(--sidebar-width);
     height: 100vh;
@@ -73,7 +70,7 @@ textarea {
     display: flex;
     flex-direction: column;
 
-    padding: 24px 12px;
+    padding: 24px 14px;
 
     background: var(--sidebar);
     color: #ffffff;
@@ -83,22 +80,27 @@ textarea {
     transition: width 0.2s ease;
 }
 
+
+/* =========================
+   BRAND
+   ========================= */
+
 .brand {
-    height: 42px;
+    height: 44px;
 
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 12px;
 
-    padding: 0 12px;
-    margin-bottom: 40px;
+    padding: 0 10px;
+    margin-bottom: 36px;
 
     white-space: nowrap;
 }
 
 .brand-icon {
-    width: 42px;
-    height: 42px;
+    width: 38px;
+    height: 38px;
 
     display: flex;
     align-items: center;
@@ -106,46 +108,59 @@ textarea {
 
     flex-shrink: 0;
 
-    border: 2px solid #20d6b2;
-    border-radius: 50%;
+    border-radius: 9px;
 
-    color: #20d6b2;
+    background: var(--primary);
+    color: #ffffff;
+}
 
-    font-size: 22px;
-    font-weight: 500;
+.brand-icon svg {
+    width: 20px;
+    height: 20px;
 }
 
 .brand-name {
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 600;
-    line-height: 1.4;
+    line-height: 1.35;
 }
 
 .brand-name span {
     display: block;
+
+    color: #9ca3af;
+
+    font-size: 13px;
+    font-weight: 400;
 }
+
+
+/* =========================
+   NAVIGATION
+   ========================= */
 
 .sidebar-nav {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 6px;
 }
 
 .nav-item {
     width: 100%;
-    min-height: 58px;
+    min-height: 46px;
 
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 13px;
 
-    padding: 0 16px;
+    padding: 0 13px;
 
     border-radius: 7px;
 
-    color: #ffffff;
+    color: #9ca3af;
 
-    font-size: 15px;
+    font-size: 14px;
+    font-weight: 500;
 
     text-decoration: none;
     white-space: nowrap;
@@ -156,17 +171,38 @@ textarea {
 }
 
 .nav-item:hover {
-    background: rgba(255, 255, 255, 0.06);
+    background: var(--sidebar-hover);
+    color: #ffffff;
 }
 
 .nav-item.active {
-    background: var(--sidebar-active);
-    color: #20d6b2;
+    position: relative;
+
+    background: rgba(37, 99, 235, 0.12);
+    color: #ffffff;
+}
+
+.nav-item.active::before {
+    content: "";
+
+    position: absolute;
+    left: -14px;
+
+    width: 3px;
+    height: 28px;
+
+    border-radius: 0 3px 3px 0;
+
+    background: var(--primary);
+}
+
+.nav-item.active .nav-icon {
+    color: #60a5fa;
 }
 
 .nav-icon {
-    width: 20px;
-    height: 20px;
+    width: 19px;
+    height: 19px;
 
     flex-shrink: 0;
 
@@ -177,12 +213,43 @@ textarea {
     overflow: hidden;
 }
 
-.sidebar-footer {
+
+/* =========================
+   SIDEBAR TOGGLE
+   ========================= */
+
+.sidebar-toggle {
+    width: 100%;
+    min-height: 46px;
+
     display: flex;
-    flex-direction: column;
-    gap: 4px;
+    align-items: center;
+    gap: 13px;
 
     margin-top: auto;
+    padding: 0 13px;
+
+    border: 0;
+    border-top: 1px solid #273244;
+    border-radius: 0;
+
+    background: transparent;
+    color: #9ca3af;
+
+    font-size: 13px;
+
+    cursor: pointer;
+}
+
+.sidebar-toggle:hover {
+    color: #ffffff;
+}
+
+.sidebar-toggle svg {
+    width: 19px;
+    height: 19px;
+
+    flex-shrink: 0;
 }
 
 
@@ -203,108 +270,13 @@ textarea {
 
 
 /* =========================
-   TOPBAR
-   ========================= */
-
-.topbar {
-    height: var(--topbar-height);
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    padding: 0 32px;
-
-    background: var(--surface);
-
-    border-bottom: 1px solid var(--border);
-}
-
-.menu-button,
-.notification-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    padding: 0;
-
-    border: 0;
-
-    background: transparent;
-    color: var(--foreground);
-
-    cursor: pointer;
-}
-
-.menu-button {
-    width: 36px;
-    height: 36px;
-}
-
-.menu-button svg {
-    width: 26px;
-    height: 26px;
-}
-
-.topbar-user {
-    display: flex;
-    align-items: center;
-}
-
-.notification-button {
-    width: 36px;
-    height: 36px;
-
-    margin-right: 32px;
-}
-
-.notification-button svg {
-    width: 22px;
-    height: 22px;
-}
-
-.user-avatar {
-    width: 46px;
-    height: 46px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    flex-shrink: 0;
-
-    margin-right: 12px;
-
-    border-radius: 50%;
-
-    background: #edf0f4;
-    color: #4a5568;
-
-    font-size: 15px;
-    font-weight: 600;
-}
-
-.user-name {
-    font-size: 15px;
-    font-weight: 600;
-}
-
-.user-arrow {
-    width: 18px;
-    height: 18px;
-
-    margin-left: 10px;
-}
-
-
-/* =========================
    CONTENT
    ========================= */
 
 .content {
-    min-height: calc(100vh - var(--topbar-height));
+    min-height: 100vh;
 
-    padding: 32px;
+    padding: 36px;
 
     background: var(--background);
 }
@@ -334,7 +306,8 @@ textarea {
     display: none;
 }
 
-.app.sidebar-collapsed .nav-item {
+.app.sidebar-collapsed .nav-item,
+.app.sidebar-collapsed .sidebar-toggle {
     justify-content: center;
     gap: 0;
 

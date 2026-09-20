@@ -19,7 +19,7 @@
     <div class="app" id="app">
         <aside class="sidebar">
             <div class="brand">
-                <div class="brand-icon">$</div>
+                <div class="brand-icon"><i data-lucide="wallet-cards"></i></div>
 
                 <div class="brand-name">
                     Personal Finance
@@ -29,52 +29,28 @@
 
             <nav class="sidebar-nav">
                 <a href="{{ url_for('purchases.purchases') }}" class="nav-item {% if request.path == '/' or request.path == '/purchases' %}active{% endif %}"> 
-                    <i data-lucide="shopping-cart" class="nav-icon"></i> <span class="nav-text">Compras</span>
+                    <i data-lucide="shopping-bag" class="nav-icon"></i><span class="nav-text">Compras</span>
                 </a>
 
                 <a href="{{ url_for('payment_methods.payment_methods') }}" class="nav-item {% if request.path == '/payment-methods' %}active{% endif %}"> 
-                    <i data-lucide="credit-card" class="nav-icon"></i> <span class="nav-text">Formas de Pagamento</span>
+                    <i data-lucide="credit-card" class="nav-icon"></i><span class="nav-text">Formas de Pagamento</span>
                 </a>
 
                 <a href="{{ url_for('transactions.transactions') }}" class="nav-item {% if request.path == '/transactions' %}active{% endif %}">
-                    <i data-lucide="receipt-text" class="nav-icon"></i><span class="nav-text">Lançamentos</span>
+                    <i data-lucide="receipt" class="nav-icon"></i><span class="nav-text">Lançamentos</span>
                 </a>
 
                 <a href="{{ url_for('people.people') }}" class="nav-item {% if request.path == '/people' %}active{% endif %}">
-                    <i data-lucide="users" class="nav-icon"></i><span class="nav-text">Pessoas</span>
+                    <i data-lucide="users-round" class="nav-icon"></i><span class="nav-text">Pessoas</span>
                 </a>
             </nav>
 
-            <div class="sidebar-footer">
-                <a href="#" class="nav-item">
-                    <i data-lucide="settings" class="nav-icon"></i><span class="nav-text">Configurações</span>
-                </a>
-
-                <a href="#" class="nav-item">
-                    <i data-lucide="log-out" class="nav-icon"></i><span class="nav-text">Sair</span>
-                </a>
-            </div>
+            <button class="sidebar-toggle" id="menu-button" type="button" aria-label="Fechar menu">
+                <i data-lucide="panel-left-close" id="menu-icon"></i> <span class="nav-text">Recolher menu</span>
+            </button>
         </aside>
 
         <div class="page">
-            <header class="topbar">
-                <button class="menu-button" id="menu-button" type="button" aria-label="Fechar menu">
-                    <i data-lucide="panel-left-close" id="menu-icon"></i>
-                </button>
-
-                <div class="topbar-user">
-                    <button class="notification-button" type="button" aria-label="Notificações">
-                        <i data-lucide="bell"></i>
-                    </button>
-
-                    <div class="user-avatar">BF</div>
-
-                    <span class="user-name">Breno</span>
-
-                    <i data-lucide="chevron-down" class="user-arrow"></i>
-                </div>
-            </header>
-
             <main class="content">
                 {% block content %}{% endblock %}
             </main>
