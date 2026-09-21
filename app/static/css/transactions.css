@@ -1,0 +1,50 @@
+/* ==================================================
+   TRANSACTION STATUS
+================================================== */
+
+.transaction-status {
+    min-width: 105px;
+    height: 34px;
+    padding: 0 32px 0 12px;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+
+    background-color: #ffffff;
+
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 500;
+    color: #334155;
+
+    cursor: pointer;
+    outline: none;
+
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.transaction-status:hover {
+    border-color: #cbd5e1;
+}
+
+.transaction-status:focus {
+    border-color: #94a3b8;
+    box-shadow: 0 0 0 3px rgba(148, 163, 184, 0.15);
+}
+
+
+/* ==================================================
+   TRANSACTION STATUS ROWS
+================================================== */
+
+#transactions-table tbody tr.transaction-paid > td {
+    background-color: #dcfce7;
+}
+
+#transactions-table tbody tr.transaction-separated > td {
+    background-color: #fef9c3;
+}
+
+#transactions-table tbody tr.transaction-overdue > td {
+    background-color: #fee2e2;
+}

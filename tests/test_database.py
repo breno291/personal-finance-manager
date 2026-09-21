@@ -163,7 +163,7 @@ def test_table_constraints(connection):
     assert columns[3][2] == "INTEGER"
     assert columns[4][2] == "INTEGER"
     assert columns[5][2] == "DATE"
-    assert columns[6][2] == "DATE"
+    assert columns[6][2] == "TIMESTAMP"
     assert columns[7][2] == "INTEGER"
     assert columns[8][2] == "INTEGER"
 
