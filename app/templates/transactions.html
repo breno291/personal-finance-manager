@@ -4,6 +4,9 @@
 
 {% block styles %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/pages.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/tables.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/transactions.css') }}">
+<link rel="stylesheet" href="https://cdn.datatables.net/3.0.3/css/dataTables.dataTables.css">
 {% endblock %}
 
 {% block content %}
@@ -14,10 +17,87 @@
     </div>
 </div>
 
-<div class="records-container">
-    <div class="empty-state">
-        <i data-lucide="receipt-text"></i>
-        <p>Nenhum lançamento encontrado.</p>
+<div class="table-toolbar">
+    <div class="table-search">
+        <i data-lucide="search"></i>
+        <input type="search" id="transactions-search" placeholder="Buscar lançamentos...">
     </div>
+
+    <div class="table-filter-group">
+        <label for="person-filter">Responsável</label>
+        <select id="person-filter" class="table-filter">
+            <option value="">Todos os responsáveis</option>
+        </select>
+    </div>
+
+    <div class="table-filter-group">
+        <label for="payment-method-filter">Forma de pagamento</label>
+        <select id="payment-method-filter" class="table-filter">
+            <option value="">Todas as formas</option>
+        </select>
+    </div>
+
+    <div class="table-filter-group">
+        <label for="purchase-month-filter">Mês da compra</label>
+        <select id="purchase-month-filter" class="table-filter">
+            <option value="">Todos os meses</option>
+        </select>
+    </div>
+
+    <div class="table-filter-group">
+        <label for="due-month-filter">Mês de vencimento</label>
+        <select id="due-month-filter" class="table-filter">
+            <option value="">Todos os meses</option>
+        </select>
+    </div>
+
+    <button type="button" id="clear-filters" class="table-clear-filters">
+        <i data-lucide="x"></i>Limpar filtros
+    </button>
 </div>
+
+<div class="table-wrapper">
+    <table class="data-table" id="transactions-table">
+        <thead>
+            <tr>
+                <th>Data da compra</th>
+                <th>Descrição</th>
+                <th>Forma de pagamento</th>
+                <th>Responsável</th>
+                <th>Parcela</th>
+                <th>Valor</th>
+                <th>Vencimento</th>
+                <th>Data do pagamento</th>
+                <th>Pago?</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for transaction in transactions %}
+                <tr data-transaction-id="{{ transaction.transaction_id }}">
+                    <td data-order="{{ transaction.purchase_date_order }}">{{ transaction.purchase_date }}</td>
+                    <td>{{ transaction.purchase_description }}</td>
+                    <td>{{ transaction.payment_method_description }}</td>
+                    <td>{{ transaction.person_name }}</td>
+                    <td>{{ transaction.installment }}/{{ transaction.installment_count }}</td>
+                    <td>{{ transaction.value }}</td>
+                    <td data-order="{{ transaction.due_date_order }}">{{ transaction.due_date }}</td>
+                    <td class="transaction-payment-date">{{ transaction.payment_date or "-" }}</td>
+                    <td>
+                        <select class="transaction-status" data-transaction-id="{{ transaction.transaction_id }}">
+                            <option value="0" {% if transaction.status == 0 %}selected{% endif %}>Não</option>
+                            <option value="1" {% if transaction.status == 1 %}selected{% endif %}>Sim</option>
+                            <option value="2" {% if transaction.status == 2 %}selected{% endif %}>Separado</option>
+                        </select>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.datatables.net/3.0.3/js/dataTables.js"></script>
+<script src="{{ url_for('static', filename='js/transactions.js') }}"></script>
 {% endblock %}

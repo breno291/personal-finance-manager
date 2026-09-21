@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from app.services.validation import validate_and_convert_date, validate_positive_integer, validate_transaction_status
 
 
@@ -82,4 +84,37 @@ def select_transactions_by_purchase_id(connection, purchase_id):
     return cursor.fetchall()
 
 
+def select_transactions_details(connection, order="DESC"):
+    cursor = connection.cursor()
+
+    query = """
+        SELECT t.id AS transaction_id,t.purchase_id,p.description AS purchase_description,p.purchase_date,
+        p.installment_count,pm.id AS payment_method_id,pm.description AS payment_method_description,
+        t.person_id,pp.name AS person_name,t.installment,t.value,t.due_date,t.payment_date,t.status
+        FROM transactions AS t JOIN purchases AS p ON t.purchase_id = p.id
+        JOIN people AS pp ON pp.id = t.person_id JOIN payment_methods AS pm ON p.payment_method_id = pm.id
+        WHERE t.removed = 0 AND p.removed = 0 ORDER BY t.id
+    """
+
+    if order.upper() == "DESC":
+        query += " DESC"
+    else:
+        query += " ASC"
+
+    return cursor.execute(query).fetchall()
+
+
+def update_transaction_status(connection, transaction_id, status):
+    validate_positive_integer(transaction_id, "transaction_id")
+    validate_transaction_status(status)
+
+    payment_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S") if status == 1 else None
+    query = "UPDATE transactions SET status=?, payment_date=? WHERE id=? AND removed=0"
+    values = (status, payment_date, transaction_id)
+
+    cursor = connection.cursor()
+    cursor.execute(query, values)
+
+    if cursor.rowcount == 0:
+        raise ValueError("transaction not found")
 

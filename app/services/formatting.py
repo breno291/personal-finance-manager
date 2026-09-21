@@ -40,3 +40,24 @@ def format_purchase(purchase):
 def format_purchases(purchases):
     return [format_purchase(purchase) for purchase in purchases]
 
+
+def format_transaction(transaction):
+    formatted_transaction = dict(transaction)
+
+    formatted_transaction["purchase_date_order"] = transaction["purchase_date"]
+    formatted_transaction["purchase_date"] = format_date(transaction["purchase_date"])
+
+    formatted_transaction["due_date_order"] = transaction["due_date"]
+    formatted_transaction["due_date"] = format_date(transaction["due_date"])
+
+    if transaction["payment_date"]:
+        formatted_transaction["payment_date"] = format_datetime(transaction["payment_date"])
+
+    formatted_transaction["value"] = format_currency(transaction["value"])
+
+    return formatted_transaction
+
+
+def format_transactions(transactions):
+    return [format_transaction(transaction) for transaction in transactions]
+

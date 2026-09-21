@@ -50,7 +50,7 @@ def create_tables(connection):
         installment INTEGER NOT NULL,
         value INTEGER NOT NULL,
         due_date DATE NOT NULL,
-        payment_date DATE,
+        payment_date TIMESTAMP NULL,
         status INTEGER NOT NULL DEFAULT 0,
         removed INTEGER NOT NULL DEFAULT 0,
 
