@@ -626,3 +626,95 @@ def test_update_transaction_status_when_transaction_is_removed(connection):
     with pytest.raises(ValueError):
         update_transaction_status(connection, transaction_id, 1)
 
+
+# ==================================================
+# SELECT OLDEST PENDING DUE DATE
+# ==================================================
+
+def test_select_oldest_pending_due_date(connection):
+    person_id = insert_person(connection, "Luciana", "luciana@email.com", "81988888888")
+    payment_method_id = insert_payment_method(connection, "PicPay", 2, 23, 6)
+
+    purchase_id = insert_purchase(connection, "Ração", "05/12/2026", 3221, 3, payment_method_id, 2, 4)
+
+    insert_transaction(connection, purchase_id, person_id, 1, 1074, "15/07/2026", 0)
+    insert_transaction(connection, purchase_id, person_id, 2, 1074, "12/09/2026", 0)
+    insert_transaction(connection, purchase_id, person_id, 3, 1073, "01/10/2026", 0)
+
+    transaction = select_oldest_pending_due_date(connection, payment_method_id)
+
+    assert transaction[0] == "2026-07-15"
+
+
+def test_select_oldest_pending_due_date_by_payment_method(connection):
+    person_id = insert_person(connection, "Luciana", "luciana@email.com", "81988888888")
+
+    payment_method_id_1 = insert_payment_method(connection, "PicPay", 2, 23, 6)
+    payment_method_id_2 = insert_payment_method(connection, "Nubank", 2, 23, 6)
+
+    purchase_id_1 = insert_purchase(
+        connection, "Ração", "05/12/2026", 3221, 1, payment_method_id_1, 2, 4
+    )
+    purchase_id_2 = insert_purchase(
+        connection, "Mercado", "05/12/2026", 5000, 1, payment_method_id_2, 2, 4
+    )
+
+    insert_transaction(connection, purchase_id_1, person_id, 1, 3221, "15/07/2026", 0)
+    insert_transaction(connection, purchase_id_2, person_id, 1, 5000, "10/06/2026", 0)
+
+    transaction = select_oldest_pending_due_date(connection, payment_method_id_1)
+
+    assert transaction[0] == "2026-07-15"
+
+
+def test_select_oldest_pending_due_date_ignores_paid_and_includes_separated(connection):
+    person_id = insert_person(connection, "Luciana", "luciana@email.com", "81988888888")
+    payment_method_id = insert_payment_method(connection, "PicPay", 2, 23, 6)
+
+    purchase_id = insert_purchase(connection, "Ração", "05/12/2026", 3221, 2, payment_method_id, 2, 4)
+
+    insert_transaction(connection, purchase_id, person_id, 1, 1611, "15/07/2026", 1)
+    insert_transaction(connection, purchase_id, person_id, 2, 1610, "12/09/2026", 2)
+
+    transaction = select_oldest_pending_due_date(connection, payment_method_id)
+
+    assert transaction[0] == "2026-09-12"
+
+
+def test_select_oldest_pending_due_date_returns_none_without_transactions(connection):
+    payment_method_id = insert_payment_method(connection, "PicPay", 2, 23, 6)
+
+    transaction = select_oldest_pending_due_date(connection, payment_method_id)
+
+    assert transaction is None
+
+
+def test_select_oldest_pending_due_date_returns_none_when_all_transactions_are_paid(connection):
+    person_id = insert_person(connection, "Luciana", "luciana@email.com", "81988888888")
+    payment_method_id = insert_payment_method(connection, "PicPay", 2, 23, 6)
+
+    purchase_id = insert_purchase(
+        connection, "Ração", "05/12/2026", 3221, 2, payment_method_id, 2, 4
+    )
+
+    insert_transaction(connection, purchase_id, person_id, 1, 1611, "15/07/2026", 1)
+    insert_transaction(connection, purchase_id, person_id, 2, 1610, "12/09/2026", 1)
+
+    transaction = select_oldest_pending_due_date(connection, payment_method_id)
+
+    assert transaction is None
+
+
+def test_select_oldest_pending_due_date_with_invalid_payment_method_id(connection):
+    with pytest.raises(ValueError):
+        select_oldest_pending_due_date(connection, -1)
+
+    with pytest.raises(ValueError):
+        select_oldest_pending_due_date(connection, 0)
+
+
+def test_select_oldest_pending_due_date_with_nonexistent_payment_method_id(connection):
+    assert select_oldest_pending_due_date(connection, 9999) is None
+
+
+

@@ -147,3 +147,15 @@ def update_transaction_status(connection, transaction_id, status):
     if cursor.rowcount == 0:
         raise ValueError("transaction not found")
 
+
+def select_oldest_pending_due_date(connection, payment_method_id):
+    validate_positive_integer(payment_method_id, "payment_method_id")
+
+    query = """SELECT t.due_date FROM transactions AS t JOIN purchases AS p ON t.purchase_id = p.id
+    WHERE p.payment_method_id = ? AND t.removed = ? AND p.removed = ? AND t.status != ? ORDER BY t.due_date ASC LIMIT 1"""
+
+    cursor = connection.cursor()
+    cursor.execute(query, (payment_method_id, 0, 0, 1))
+
+    return cursor.fetchone()
+
