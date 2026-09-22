@@ -3,7 +3,7 @@
 // ==================================================
 
 const transactionsTable = new DataTable("#transactions-table", {
-    pageLength: 15,
+    pageLength: 20,
     lengthChange: false,
     order: [],
 
@@ -207,3 +207,6 @@ function updateTransactionStatusRows() {
 
 updateTransactionStatusRows();
 
+transactionsTable.on("draw", function () {
+    updateTransactionStatusRows();
+});
