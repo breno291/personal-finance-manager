@@ -382,14 +382,142 @@ def test_select_transactions_details_order(connection):
     transaction_id_1 = insert_transaction(connection, purchase_id, person_id, 1, 1611, "01/09/2026", 0)
     transaction_id_2 = insert_transaction(connection, purchase_id, person_id, 2, 1610, "01/10/2026", 0)
 
-    transactions_asc = select_transactions_details(connection, "ASC")
-    transactions_desc = select_transactions_details(connection, "DESC")
+    transactions_asc = select_transactions_details(connection, order="ASC")
+    transactions_desc = select_transactions_details(connection, order="DESC")
 
     assert transactions_asc[0][0] == transaction_id_1
     assert transactions_asc[1][0] == transaction_id_2
 
     assert transactions_desc[0][0] == transaction_id_2
     assert transactions_desc[1][0] == transaction_id_1
+
+
+def test_select_transactions_details_with_invalid_order(connection):
+    with pytest.raises(ValueError):
+        select_transactions_details(connection, order="INVALID")
+
+
+def test_select_transactions_details_by_payment_method_id(connection):
+    person_id = insert_person(connection, "Luciana", "luciana@email.com", "81988888888")
+    payment_method_id = insert_payment_method(connection, "PicPay", 2, 23, 6)
+    purchase_id = insert_purchase(connection, "Ração", "05/12/2026", 3221, 2, payment_method_id, 2, 4)
+
+    transaction_id_1 = insert_transaction(connection, purchase_id, person_id, 1, 1611, "01/09/2026", 0)
+    transaction_id_2 = insert_transaction(connection, purchase_id, person_id, 2, 1610, "01/10/2026", 0)
+
+    transactions = select_transactions_details(connection, payment_method_id=payment_method_id, order="ASC")
+
+    assert len(transactions) == 2
+    assert transactions[0][0] == transaction_id_1
+    assert transactions[0][1] == purchase_id
+    assert transactions[0][5] == payment_method_id
+    assert transactions[0][6] == "PicPay"
+    assert transactions[1][0] == transaction_id_2
+    assert transactions[1][1] == purchase_id
+    assert transactions[1][5] == payment_method_id
+    assert transactions[1][6] == "PicPay"
+
+
+def test_select_transactions_by_payment_method_id_does_not_return_another_payment_method(connection):
+    person_id = insert_person(connection, "Luciana", "luciana@email.com", "81988888888")
+    payment_method_id_1 = insert_payment_method(connection, "PicPay", 2, 23, 6)
+    payment_method_id_2 = insert_payment_method(connection, "Nubank", 2, 23, 6)
+
+    purchase_id_1 = insert_purchase(connection, "Ração", "05/12/2026", 3221, 1, payment_method_id_1, 2, 4)
+    purchase_id_2 = insert_purchase(connection, "Gasolina", "05/12/2026", 5000, 1, payment_method_id_2, 6, 16)
+
+    insert_transaction(connection, purchase_id_1, person_id, 1, 3221, "01/09/2026", 0)
+    insert_transaction(connection, purchase_id_2, person_id, 1, 5000, "01/09/2026", 0)
+
+    transactions = select_transactions_details(connection, payment_method_id=payment_method_id_1, order="ASC")
+
+    assert len(transactions) == 1
+    assert transactions[0][5] == payment_method_id_1
+
+
+def test_select_transactions_by_payment_method_id_with_invalid_id(connection):
+    with pytest.raises(ValueError):
+        select_transactions_details(connection, payment_method_id=-1, order="ASC")
+
+    with pytest.raises(ValueError):
+        select_transactions_details(connection, payment_method_id=0, order="ASC")
+
+
+def test_select_transactions_by_payment_method_id_with_nonexistent_id(connection):
+    transactions = select_transactions_details(connection, payment_method_id=9999, order="ASC")
+
+    assert transactions == []
+
+
+def test_select_transactions_with_due_month(connection):
+    person_id = insert_person(connection, "Luciana", "luciana@email.com", "81988888888")
+    payment_method_id = insert_payment_method(connection, "PicPay", 2, 23, 6)
+    purchase_id_1 = insert_purchase(connection, "Ração", "05/12/2026", 3221, 2, payment_method_id, 2, 4)
+    purchase_id_2 = insert_purchase(connection, "Ração", "05/12/2026", 3221, 2, payment_method_id, 2, 4)
+    purchase_id_3 = insert_purchase(connection, "Ração", "05/12/2026", 3221, 2, payment_method_id, 2, 4)
+    purchase_id_4 = insert_purchase(connection, "Ração", "05/12/2026", 3221, 2, payment_method_id, 2, 4)
+
+    transaction_id_1 = insert_transaction(connection, purchase_id_1, person_id, 1, 1611, "15/09/2026", 0)
+    insert_transaction(connection, purchase_id_1, person_id, 2, 1611, "01/10/2026", 0)
+    transaction_id_2 = insert_transaction(connection, purchase_id_2, person_id, 1, 1611, "01/09/2026", 0)
+    insert_transaction(connection, purchase_id_3, person_id, 2, 1610, "01/10/2026", 0)
+    transaction_id_3 = insert_transaction(connection, purchase_id_4, person_id, 1, 1611, "04/09/2026", 0)
+
+    transactions = select_transactions_details(connection, due_month="09/2026", order="ASC")
+    
+    assert len(transactions) == 3
+    assert transactions[0][0] == transaction_id_1
+    assert transactions[0][5] == payment_method_id
+    assert transactions[0][6] == "PicPay"
+    assert transactions[0][11] == "2026-09-15"
+    assert transactions[1][0] == transaction_id_2
+    assert transactions[1][5] == payment_method_id
+    assert transactions[1][6] == "PicPay"
+    assert transactions[1][11] == "2026-09-01"
+    assert transactions[2][0] == transaction_id_3
+    assert transactions[2][5] == payment_method_id
+    assert transactions[2][6] == "PicPay"
+    assert transactions[2][11] == "2026-09-04"
+
+
+def test_select_transactions_with_due_month_and_payment_method_id(connection):
+    person_id = insert_person(connection, "Luciana", "luciana@email.com", "81988888888")
+    payment_method_id_1 = insert_payment_method(connection, "PicPay", 2, 23, 6)
+    payment_method_id_2 = insert_payment_method(connection, "Nubank", 2, 23, 6)
+    purchase_id_1 = insert_purchase(connection, "Ração", "05/12/2026", 3221, 2, payment_method_id_1, 2, 4)
+    purchase_id_2 = insert_purchase(connection, "Ração", "05/12/2026", 3221, 2, payment_method_id_2, 2, 4)
+    purchase_id_3 = insert_purchase(connection, "Ração", "05/12/2026", 3221, 2, payment_method_id_2, 2, 4)
+    purchase_id_4 = insert_purchase(connection, "Ração", "05/12/2026", 3221, 2, payment_method_id_1, 2, 4)
+
+    transaction_id_1 = insert_transaction(connection, purchase_id_1, person_id, 1, 1611, "15/09/2026", 0)
+    insert_transaction(connection, purchase_id_1, person_id, 2, 1611, "01/10/2026", 0)
+    insert_transaction(connection, purchase_id_2, person_id, 1, 1611, "01/09/2026", 0)
+    transaction_id_3 = insert_transaction(connection, purchase_id_3, person_id, 2, 1610, "01/10/2026", 0)
+    transaction_id_5 = insert_transaction(connection, purchase_id_4, person_id, 1, 1611, "04/09/2026", 0)
+
+    transactions = select_transactions_details(connection, payment_method_id_1, "09/2026", "ASC")
+    
+    assert len(transactions) == 2
+    assert transactions[0][0] == transaction_id_1
+    assert transactions[0][5] == payment_method_id_1
+    assert transactions[0][6] == "PicPay"
+    assert transactions[0][11] == "2026-09-15"
+    assert transactions[1][0] == transaction_id_5
+    assert transactions[1][5] == payment_method_id_1
+    assert transactions[1][6] == "PicPay"
+    assert transactions[1][11] == "2026-09-04"
+
+    transactions = select_transactions_details(connection, payment_method_id_2, "10/2026", "ASC")
+    
+    assert len(transactions) == 1
+    assert transactions[0][0] == transaction_id_3
+    assert transactions[0][5] == payment_method_id_2
+    assert transactions[0][6] == "Nubank"
+    assert transactions[0][11] == "2026-10-01"
+
+    transactions = select_transactions_details(connection, payment_method_id_1, "11/2026", "ASC")
+
+    assert len(transactions) == 0
 
 
 # ==================================================

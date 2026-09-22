@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from app.services.validation import validate_and_convert_date, validate_positive_integer, validate_transaction_status
+from app.services.validation import validate_and_convert_date, validate_positive_integer, validate_transaction_status, get_month_date_range
 
 
 def insert_transaction(connection, purchase_id, person_id, installment, value, due_date, status):
@@ -84,24 +84,53 @@ def select_transactions_by_purchase_id(connection, purchase_id):
     return cursor.fetchall()
 
 
-def select_transactions_details(connection, order="DESC"):
-    cursor = connection.cursor()
-
+def select_transactions_details(connection, payment_method_id=None, due_month=None, order="DESC"):
     query = """
-        SELECT t.id AS transaction_id,t.purchase_id,p.description AS purchase_description,p.purchase_date,
-        p.installment_count,pm.id AS payment_method_id,pm.description AS payment_method_description,
-        t.person_id,pp.name AS person_name,t.installment,t.value,t.due_date,t.payment_date,t.status
-        FROM transactions AS t JOIN purchases AS p ON t.purchase_id = p.id
-        JOIN people AS pp ON pp.id = t.person_id JOIN payment_methods AS pm ON p.payment_method_id = pm.id
-        WHERE t.removed = 0 AND p.removed = 0 ORDER BY t.id
+        SELECT t.id AS transaction_id,
+        t.purchase_id,
+        p.description AS purchase_description,
+        p.purchase_date,
+        p.installment_count,
+        pm.id AS payment_method_id,
+        pm.description AS payment_method_description,
+        t.person_id,
+        pp.name AS person_name,
+        t.installment,
+        t.value,
+        t.due_date,
+        t.payment_date,
+        t.status
+        FROM transactions AS t 
+        JOIN purchases AS p ON t.purchase_id = p.id
+        JOIN people AS pp ON pp.id = t.person_id 
+        JOIN payment_methods AS pm ON p.payment_method_id = pm.id
+        WHERE t.removed = ? AND p.removed = ?
     """
 
-    if order.upper() == "DESC":
-        query += " DESC"
-    else:
-        query += " ASC"
+    values: list[int | str] = [0, 0]
 
-    return cursor.execute(query).fetchall()
+    if payment_method_id is not None:
+        validate_positive_integer(payment_method_id, "payment_method_id")
+
+        query += " AND p.payment_method_id = ?"
+        values.append(payment_method_id)
+
+    if due_month is not None:
+        start_date, end_date = get_month_date_range(due_month)
+
+        query += " AND t.due_date >= ? AND t.due_date < ?"
+        values.append(start_date)
+        values.append(end_date)
+
+    order = order.upper()
+    if order not in ("ASC", "DESC"):
+        raise ValueError("order must be ASC or DESC")
+
+    query += f" ORDER BY t.id {order}"
+
+    cursor = connection.cursor()
+    cursor.execute(query, tuple(values))
+    return cursor.fetchall()
 
 
 def update_transaction_status(connection, transaction_id, status):
