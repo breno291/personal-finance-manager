@@ -91,3 +91,23 @@ def html_date_to_br_date(value):
     year, month, day = value.split("-")
 
     return f"{day}/{month}/{year}"
+
+
+def get_month_date_range(due_month):
+    try:
+        month, year = map(int, due_month.split("/"))
+    except (ValueError, AttributeError):
+        raise ValueError("due_month must be in MM/YYYY format")
+
+    if month < 1 or month > 12:
+        raise ValueError("month must be between 1 and 12")
+
+    start_date = f"{year}-{month:02d}-01"
+
+    if month == 12:
+        end_date = f"{year + 1}-01-01"
+    else:
+        end_date = f"{year}-{month + 1:02d}-01"
+
+    return start_date, end_date
+

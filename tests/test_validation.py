@@ -190,4 +190,41 @@ def test_validate_transaction_status():
         validate_transaction_status(3)
 
 
+# ==================================================
+# VALIDATE GET MONTH DATE RANGE
+# ==================================================
+
+def test_get_month_date_range():
+    start_date, end_date = get_month_date_range("09/2026")
+
+    assert start_date == "2026-09-01"
+    assert end_date == "2026-10-01"
+
+
+def test_get_month_date_range_at_end_of_year():
+    start_date, end_date = get_month_date_range("12/2026")
+
+    assert start_date == "2026-12-01"
+    assert end_date == "2027-01-01"
+
+
+def test_get_month_date_range_with_invalid_month():
+    with pytest.raises(ValueError):
+        get_month_date_range("13/2026")
+
+    with pytest.raises(ValueError):
+        get_month_date_range("00/2026")
+
+
+def test_get_month_date_range_with_invalid_format():
+    with pytest.raises(ValueError):
+        get_month_date_range("09-2026")
+
+    with pytest.raises(ValueError):
+        get_month_date_range("2026/09")
+
+    with pytest.raises(ValueError):
+        get_month_date_range("invalid")
+
+
 
