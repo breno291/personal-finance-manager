@@ -643,7 +643,7 @@ def test_select_oldest_pending_due_date(connection):
 
     transaction = select_oldest_pending_due_date(connection, payment_method_id)
 
-    assert transaction[0] == "2026-07-15"
+    assert transaction == "2026-07-15"
 
 
 def test_select_oldest_pending_due_date_by_payment_method(connection):
@@ -652,19 +652,15 @@ def test_select_oldest_pending_due_date_by_payment_method(connection):
     payment_method_id_1 = insert_payment_method(connection, "PicPay", 2, 23, 6)
     payment_method_id_2 = insert_payment_method(connection, "Nubank", 2, 23, 6)
 
-    purchase_id_1 = insert_purchase(
-        connection, "Ração", "05/12/2026", 3221, 1, payment_method_id_1, 2, 4
-    )
-    purchase_id_2 = insert_purchase(
-        connection, "Mercado", "05/12/2026", 5000, 1, payment_method_id_2, 2, 4
-    )
+    purchase_id_1 = insert_purchase(connection, "Ração", "05/12/2026", 3221, 1, payment_method_id_1, 2, 4)
+    purchase_id_2 = insert_purchase(connection, "Mercado", "05/12/2026", 5000, 1, payment_method_id_2, 2, 4)
 
     insert_transaction(connection, purchase_id_1, person_id, 1, 3221, "15/07/2026", 0)
     insert_transaction(connection, purchase_id_2, person_id, 1, 5000, "10/06/2026", 0)
 
     transaction = select_oldest_pending_due_date(connection, payment_method_id_1)
 
-    assert transaction[0] == "2026-07-15"
+    assert transaction == "2026-07-15"
 
 
 def test_select_oldest_pending_due_date_ignores_paid_and_includes_separated(connection):
@@ -678,7 +674,7 @@ def test_select_oldest_pending_due_date_ignores_paid_and_includes_separated(conn
 
     transaction = select_oldest_pending_due_date(connection, payment_method_id)
 
-    assert transaction[0] == "2026-09-12"
+    assert transaction == "2026-09-12"
 
 
 def test_select_oldest_pending_due_date_returns_none_without_transactions(connection):
@@ -693,9 +689,7 @@ def test_select_oldest_pending_due_date_returns_none_when_all_transactions_are_p
     person_id = insert_person(connection, "Luciana", "luciana@email.com", "81988888888")
     payment_method_id = insert_payment_method(connection, "PicPay", 2, 23, 6)
 
-    purchase_id = insert_purchase(
-        connection, "Ração", "05/12/2026", 3221, 2, payment_method_id, 2, 4
-    )
+    purchase_id = insert_purchase(connection, "Ração", "05/12/2026", 3221, 2, payment_method_id, 2, 4)
 
     insert_transaction(connection, purchase_id, person_id, 1, 1611, "15/07/2026", 1)
     insert_transaction(connection, purchase_id, person_id, 2, 1610, "12/09/2026", 1)

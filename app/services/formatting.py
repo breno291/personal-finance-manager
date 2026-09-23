@@ -13,6 +13,12 @@ def format_date(value):
 
     return datetime.strptime(value, "%Y-%m-%d").strftime("%d/%m/%Y")
 
+def format_month(value):
+    if isinstance(value, (date, datetime)):
+        return value.strftime("%m/%Y")
+
+    return datetime.strptime(value, "%Y-%m-%d").strftime("%m/%Y")
+
 
 def format_datetime(value):
     if isinstance(value, datetime):
@@ -60,4 +66,45 @@ def format_transaction(transaction):
 
 def format_transactions(transactions):
     return [format_transaction(transaction) for transaction in transactions]
+
+
+def format_account(account, transactions):
+    people = {}
+    purchases = {}
+
+    for row in transactions:
+        person_id = row["person_id"]
+        purchase_id = row["purchase_id"]
+        value = row["value"]
+
+        if person_id not in people:
+            people[person_id] = {"id": person_id, "name": row["person_name"], "total": 0}
+
+        people[person_id]["total"] += value
+
+        if purchase_id not in purchases:
+            purchases[purchase_id] = {"id": purchase_id, "description": row["purchase_description"], "people": {}, "total": 0, "statuses": []}
+
+        purchase = purchases[purchase_id]
+
+        purchase["people"][str(person_id)] = (purchase["people"].get(str(person_id), 0) + value)
+
+        purchase["total"] += value
+        purchase["statuses"].append(row["status"])
+
+    for purchase in purchases.values():
+        statuses = purchase.pop("statuses")
+
+        if all(status == 1 for status in statuses):
+            purchase["status"] = 1
+        elif 2 in statuses:
+            purchase["status"] = 2
+        else:
+            purchase["status"] = 0
+
+    account["people"] = list(people.values())
+    account["purchases"] = list(purchases.values())
+    account["total"] = sum(person["total"] for person in people.values())
+
+    return account
 

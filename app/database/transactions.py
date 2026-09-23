@@ -156,6 +156,7 @@ def select_oldest_pending_due_date(connection, payment_method_id):
 
     cursor = connection.cursor()
     cursor.execute(query, (payment_method_id, 0, 0, 1))
+    result = cursor.fetchone()
 
-    return cursor.fetchone()
+    return result[0] if result else None
 

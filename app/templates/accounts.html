@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+
+{% block title %}Contas | Personal Finance Manager{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/cards.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/accounts.css') }}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/style.css">
+{% endblock %}
+
+{% block content %}
+<header class="page-header accounts-page-header">
+    <div class="page-title">
+        <h1>Contas</h1>
+        <p>Confira os valores por forma de pagamento.</p>
+    </div>
+</header>
+
+{% if accounts %}
+<div class="cards-content">
+    <div class="cards-grid accounts-grid">
+
+        {% for account in accounts %}
+        <section class="card account-card" data-payment-method-id="{{ account.payment_method.id }}">
+            <header class="account-card-header">
+                <div class="account-method">
+                    <div class="account-method-logo">
+                        <i data-lucide="credit-card"></i>
+                    </div>
+
+                    <h2 class="account-method-description">
+                        {{ account.payment_method.description }}
+                    </h2>
+                </div>
+
+                <div class="account-month">
+                    <button type="button" class="account-month-previous" aria-label="Mês anterior">
+                        <i data-lucide="chevron-left"></i>
+                    </button>
+
+                    <input type="text" class="account-month-input" value="{{ account.month }}" aria-label="Selecionar mês">
+
+                    <button type="button" class="account-month-next" aria-label="Próximo mês">
+                        <i data-lucide="chevron-right"></i>
+                    </button>
+                </div>
+            </header>
+
+            <div class="account-card-body">
+                <div class="account-content">
+
+                    {% if account.purchases %}
+                    <div class="account-table-wrapper">
+                        <table class="account-table">
+                            <thead>
+                                <tr>
+                                    <th class="account-purchase-column">Compra</th>
+
+                                    {% for person in account.people %}
+                                    <th>{{ person.name }}</th>
+                                    {% endfor %}
+
+                                    <th class="account-total-column">Total</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for purchase in account.purchases %}
+                                <tr data-purchase-id="{{ purchase.id }}" class="{% if purchase.status == 1 %}account-row-paid{% elif purchase.status == 2 %}account-row-separated{% endif %}">
+                                    <td class="account-purchase-column">
+                                        {{ purchase.description }}
+                                    </td>
+
+                                    {% for person in account.people %}
+                                    <td>
+                                        {% set value = purchase.people.get(person.id|string) %}
+
+                                        {% if value is not none %}
+                                            R$ {{ "%.2f"|format(value / 100)|replace(".", ",") }}
+                                        {% endif %}
+                                    </td>
+                                    {% endfor %}
+
+                                    <td class="account-total-column">
+                                        R$ {{ "%.2f"|format(purchase.total / 100)|replace(".", ",") }}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+
+                            <tfoot>
+                                <tr>
+                                    <th class="account-purchase-column">Total</th>
+
+                                    {% for person in account.people %}
+                                    <td>
+                                        R$ {{ "%.2f"|format(person.total / 100)|replace(".", ",") }}
+                                    </td>
+                                    {% endfor %}
+
+                                    <td class="account-total-column">
+                                        R$ {{ "%.2f"|format(account.total / 100)|replace(".", ",") }}
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+
+                    {% else %}
+                    <div class="account-empty">
+                        <i data-lucide="file"></i>
+
+                        <strong>Sem compras no mês</strong>
+                        <span>Não há compras neste período nesta forma de pagamento.</span>
+                    </div>
+                    {% endif %}
+
+                </div>
+
+                <footer class="account-card-footer">
+                    <span class="account-count">
+                        {{ account.purchases|length }} compras neste mês
+                    </span>
+
+                    <button class="account-paid-button" type="button" {% if not account.purchases %}disabled{% endif %}>
+                        <i data-lucide="check"></i>Marcar como pago
+                    </button>
+                </footer>
+            </div>
+        </section>
+        {% endfor %}
+
+    </div>
+</div>
+
+<footer class="accounts-footer">
+    <div class="accounts-legend">
+        <span>
+            <span class="legend-dot legend-paid"></span>Todos os lançamentos pagos
+        </span>
+
+        <span>
+            <span class="legend-dot legend-separated"></span>Há lançamentos separados
+        </span>
+
+        <span>
+            <span class="legend-dot legend-pending"></span>Pendentes (não pagos)
+        </span>
+    </div>
+
+    <div class="accounts-scroll-info">
+        <i data-lucide="info"></i>As pessoas exibidas podem ser navegadas horizontalmente.
+    </div>
+</footer>
+
+{% else %}
+<div class="empty-state">
+    <i data-lucide="receipt" class="nav-icon"></i>Nenhuma conta disponível
+</div>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/index.js"></script>
+<script src="{{ url_for('static', filename='js/accounts.js') }}"></script>
+{% endblock %}

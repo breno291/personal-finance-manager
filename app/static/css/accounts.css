@@ -1,0 +1,566 @@
+/* =========================
+   PAGE
+   ========================= */
+
+.accounts-page-header {
+    margin-bottom: 24px;
+}
+
+.accounts-grid {
+    align-items: start;
+}
+
+
+/* =========================
+   ACCOUNT CARD
+   ========================= */
+
+.account-card {
+    min-width: 0;
+    min-height: 0;
+
+    display: block;
+
+    padding: 0;
+
+    overflow: hidden;
+
+    cursor: default;
+
+    border-color: #cbd5e1;
+}
+
+.account-card:hover {
+    border-color: #cbd5e1;
+
+    box-shadow: 0 6px 18px rgba(15, 23, 42, 0.05);
+
+    transform: none;
+}
+
+
+/* =========================
+   CARD HEADER
+   ========================= */
+
+.account-card-header {
+    min-height: 74px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+
+    padding: 14px 16px;
+}
+
+.account-method {
+    min-width: 0;
+
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.account-method-logo {
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    color: #475569;
+
+    background: #f8fafc;
+
+    border: 1px solid #dbe3ec;
+    border-radius: 9px;
+}
+
+.account-method-logo svg {
+    width: 21px;
+    height: 21px;
+}
+
+.account-method h2 {
+    margin: 0;
+
+    overflow: hidden;
+
+    font-size: 18px;
+    font-weight: 700;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+/* =========================
+   MONTH NAVIGATION
+   ========================= */
+
+.account-month {
+    height: 36px;
+
+    display: flex;
+    align-items: stretch;
+
+    flex-shrink: 0;
+
+    overflow: visible;
+
+    background: #f8fafc;
+
+    border: 1px solid #dbe3ec;
+    border-radius: 7px;
+}
+
+.account-month button {
+    width: 36px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    padding: 0;
+
+    color: #475569;
+
+    background: transparent;
+
+    border: 0;
+
+    cursor: pointer;
+}
+
+.account-month button:hover {
+    background: #eef2f7;
+}
+
+.account-month button:first-child {
+    border-right: 1px solid #e2e8f0;
+}
+
+.account-month button:last-child {
+    border-left: 1px solid #e2e8f0;
+}
+
+.account-month button svg {
+    width: 16px;
+    height: 16px;
+}
+
+.account-month-input,
+.account-month .flatpickr-input {
+    width: 138px;
+
+    padding: 0 12px;
+
+    color: var(--foreground);
+
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    text-align: center;
+
+    background: transparent;
+
+    border: 0;
+    outline: 0;
+
+    cursor: pointer;
+}
+
+
+/* =========================
+   CARD BODY
+   ========================= */
+
+.account-card-body {
+    padding: 0 14px 12px;
+}
+
+
+/* =========================
+   TABLE
+   ========================= */
+
+.account-table-wrapper {
+    width: 100%;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 7px;
+}
+
+.account-table {
+    width: 100%;
+    min-width: max-content;
+
+    border-spacing: 0;
+    border-collapse: separate;
+
+    background: var(--surface);
+
+    font-size: 12px;
+}
+
+.account-table th,
+.account-table td {
+    height: 36px;
+
+    padding: 0 10px;
+
+    white-space: nowrap;
+
+    border-right: 1px solid #e5e7eb;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.account-table th:last-child,
+.account-table td:last-child {
+    border-right: 0;
+}
+
+.account-table thead th {
+    height: 32px;
+
+    color: #475569;
+
+    font-size: 11px;
+    font-weight: 600;
+    text-align: center;
+
+    background: #f1f5f9;
+}
+
+.account-table tbody td {
+    min-width: 100px;
+
+    color: #172033;
+
+    text-align: center;
+}
+
+.account-table tfoot th,
+.account-table tfoot td {
+    color: #0f172a;
+
+    font-weight: 700;
+    text-align: center;
+
+    background: #f1f5f9;
+
+    border-bottom: 0;
+}
+
+
+/* =========================
+   FIXED COLUMNS
+   ========================= */
+
+.account-table .account-purchase-column {
+    width: 150px;
+    min-width: 150px;
+    max-width: 150px;
+
+    position: sticky;
+    left: 0;
+    z-index: 2;
+
+    overflow: hidden;
+
+    text-align: left;
+
+    text-overflow: ellipsis;
+
+    background: var(--surface);
+}
+
+.account-table .account-total-column {
+    width: 105px;
+    min-width: 105px;
+
+    position: sticky;
+    right: 0;
+    z-index: 2;
+
+    font-weight: 700;
+    text-align: right;
+
+    background: var(--surface);
+
+    border-left: 1px solid #e2e8f0;
+}
+
+.account-table thead .account-purchase-column,
+.account-table thead .account-total-column,
+.account-table tfoot .account-purchase-column,
+.account-table tfoot .account-total-column {
+    z-index: 3;
+
+    background: #f1f5f9;
+}
+
+
+/* =========================
+   STATUS
+   ========================= */
+
+.account-table tbody .account-row-paid td {
+    background: #dcfce7;
+}
+
+.account-table tbody .account-row-separated td {
+    background: #fef9c3;
+}
+
+
+/* =========================
+   SCROLLBAR
+   ========================= */
+
+.account-table-wrapper::-webkit-scrollbar {
+    height: 7px;
+}
+
+.account-table-wrapper::-webkit-scrollbar-track {
+    background: #f1f5f9;
+}
+
+.account-table-wrapper::-webkit-scrollbar-thumb {
+    background: #94a3b8;
+
+    border-radius: 999px;
+}
+
+
+/* =========================
+   EMPTY STATE
+   ========================= */
+
+.account-empty {
+    min-height: 248px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    color: var(--muted-foreground);
+
+    text-align: center;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 7px;
+}
+
+.account-empty svg {
+    width: 38px;
+    height: 38px;
+
+    margin-bottom: 4px;
+
+    color: #64748b;
+
+    stroke-width: 1.5;
+}
+
+.account-empty strong {
+    color: var(--foreground);
+
+    font-size: 14px;
+}
+
+.account-empty span {
+    max-width: 340px;
+
+    font-size: 12px;
+}
+
+
+/* =========================
+   CARD FOOTER
+   ========================= */
+
+.account-card-footer {
+    min-height: 56px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+
+    padding-top: 12px;
+}
+
+.account-count {
+    color: #475569;
+
+    font-size: 12px;
+}
+
+.account-paid-button {
+    min-width: 170px;
+    height: 36px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    padding: 0 16px;
+
+    color: #ffffff;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    background: var(--primary);
+
+    border: 0;
+    border-radius: 7px;
+
+    cursor: pointer;
+}
+
+.account-paid-button:hover {
+    opacity: 0.9;
+}
+
+.account-paid-button svg {
+    width: 16px;
+    height: 16px;
+}
+
+.account-paid-button:disabled {
+    background: #94a3b8;
+
+    cursor: default;
+
+    opacity: 0.65;
+}
+
+
+/* =========================
+   PAGE FOOTER
+   ========================= */
+
+.accounts-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+
+    margin-top: 18px;
+    padding: 0 2px;
+
+    color: #475569;
+
+    font-size: 12px;
+}
+
+.accounts-legend,
+.accounts-legend > span,
+.accounts-scroll-info {
+    display: flex;
+    align-items: center;
+}
+
+.accounts-legend {
+    gap: 22px;
+}
+
+.accounts-legend > span,
+.accounts-scroll-info {
+    gap: 7px;
+}
+
+.legend-dot {
+    width: 11px;
+    height: 11px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+}
+
+.legend-paid {
+    background: #22c55e;
+}
+
+.legend-separated {
+    background: #facc15;
+}
+
+.legend-pending {
+    background: #94a3b8;
+}
+
+.accounts-scroll-info svg {
+    width: 16px;
+    height: 16px;
+}
+
+
+/* =========================
+   RESPONSIVE
+   ========================= */
+
+@media (max-width: 1200px) {
+    .account-card-header,
+    .accounts-footer {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .account-month {
+        width: 100%;
+    }
+
+    .account-month-input,
+    .account-month .flatpickr-input {
+        flex: 1;
+        width: auto;
+    }
+}
+
+@media (max-width: 600px) {
+    .account-card-body {
+        padding: 0 10px 10px;
+    }
+
+    .account-table .account-purchase-column {
+        width: 130px;
+        min-width: 130px;
+        max-width: 130px;
+    }
+
+    .account-table .account-total-column {
+        width: 95px;
+        min-width: 95px;
+    }
+
+    .account-card-footer {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .account-paid-button {
+        width: 100%;
+    }
+
+    .accounts-legend {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 8px;
+    }
+}

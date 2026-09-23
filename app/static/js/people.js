@@ -97,7 +97,10 @@ personCards.forEach(function (card) {
 });
 
 deletePersonButton.addEventListener("click", function () {
-    openConfirmationModal(`/people/${personId.value}/remove`);
+    openConfirmationModal(`/people/${personId.value}/remove`,
+        "Confirmar remoção",
+        "Tem certeza de que deseja remover este registro?"
+    );
 });
 
 

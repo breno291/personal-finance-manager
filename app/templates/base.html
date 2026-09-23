@@ -43,6 +43,10 @@
                 <a href="{{ url_for('people.people') }}" class="nav-item {% if request.path == '/people' %}active{% endif %}">
                     <i data-lucide="users-round" class="nav-icon"></i><span class="nav-text">Pessoas</span>
                 </a>
+
+                <a href="{{ url_for('accounts.accounts') }}" class="nav-item {% if request.path == '/accounts' %}active{% endif %}">
+                    <i data-lucide="wallet-cards" class="nav-icon"></i><span class="nav-text">Contas</span>
+                </a>
             </nav>
 
             <button class="sidebar-toggle" id="menu-button" type="button" aria-label="Fechar menu">

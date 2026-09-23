@@ -149,7 +149,10 @@ purchaseModal.addEventListener("click", function (event) {
 });
 
 deletePurchaseButton.addEventListener("click", function () {
-    openConfirmationModal(`/purchases/${selectedPurchaseId}/remove`);
+    openConfirmationModal(`/purchases/${selectedPurchaseId}/remove`,
+        "Confirmar remoção",
+        "Tem certeza de que deseja remover este registro?"
+    )
 });
 
 
