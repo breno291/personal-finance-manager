@@ -87,7 +87,11 @@ paymentMethodCards.forEach(function (card) {
 });
 
 deletePaymentMethodButton.addEventListener("click", function () {
-    openConfirmationModal(`/payment-methods/${paymentMethodId.value}/remove`);
+    openConfirmationModal(
+        `/payment-methods/${paymentMethodId.value}/remove`,
+        "Confirmar remoção",
+        "Tem certeza de que deseja remover este registro?"
+    );
 });
 
 
