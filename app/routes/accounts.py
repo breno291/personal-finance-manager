@@ -19,6 +19,7 @@ def accounts():
     try:
         accounts = []
         payment_methods = select_payment_methods(connection)
+        payment_methods = sorted(payment_methods, key=lambda payment_method: payment_method[1].lower())
 
         for payment_method_id, description, *_ in payment_methods:
             account = {}

@@ -102,7 +102,7 @@ def format_account(account, transactions):
         else:
             purchase["status"] = 0
 
-    account["people"] = list(people.values())
+    account["people"] = sorted(people.values(), key=lambda person: person["name"].lower())
     account["purchases"] = list(purchases.values())
     account["total"] = sum(person["total"] for person in people.values())
 
