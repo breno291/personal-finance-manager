@@ -192,9 +192,9 @@
 
 .account-table-wrapper {
     width: 100%;
+    max-height: 420px;
 
-    overflow-x: auto;
-    overflow-y: hidden;
+    overflow: auto;
 
     border: 1px solid #e2e8f0;
     border-radius: 7px;
@@ -232,6 +232,10 @@
 .account-table thead th {
     height: 32px;
 
+    position: sticky;
+    top: 0;
+    z-index: 3;
+
     color: #475569;
 
     font-size: 11px;
@@ -251,6 +255,10 @@
 
 .account-table tfoot th,
 .account-table tfoot td {
+    position: sticky;
+    bottom: 0;
+    z-index: 3;
+
     color: #0f172a;
 
     font-weight: 700;
@@ -304,7 +312,7 @@
 .account-table thead .account-total-column,
 .account-table tfoot .account-purchase-column,
 .account-table tfoot .account-total-column {
-    z-index: 3;
+    z-index: 4;
 
     background: #f1f5f9;
 }
@@ -328,6 +336,7 @@
    ========================= */
 
 .account-table-wrapper::-webkit-scrollbar {
+    width: 7px;
     height: 7px;
 }
 
